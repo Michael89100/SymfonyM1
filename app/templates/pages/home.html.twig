@@ -7,13 +7,56 @@
 	<div class="container mt-4">
 
 		<div class="jumbotron">
-			<h1 class="display-4">Bienvenue sur le Forum de découverte des métiers</h1>
-			<p class="lead">Ce forum vous permettra de découvrir des métiers funs et qui rapportent gros !!</p>
-			<hr class="my-4">
-			<p>Pour commencer, rendez-vous sur la page inscription pour utiliser l'application</p>
-			<a class="btn btn-primary btn-lg" href="{{ path('security.registration')}}" role="button">Inscription</a>
+
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-dismissible alert-success mt-4">
+					<strong>{{ message }}</strong>
+				</div>
+			{% endfor %}
+			{% for message in app.flashes('error') %}
+				<div class="alert alert-dismissible alert-danger mt-4">
+					<strong>{{ message }}</strong>
+				</div>
+			{% endfor %}
+			{% for message in app.flashes('warning') %}
+				<div class="alert alert-dismissible alert-warning mt-4">
+					<strong>{{ message }}</strong>
+				</div>
+			{% endfor %}
+
+			<div class="container my-5">
+				<div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+					<div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
+						<h1 class="display-4 fw-bold lh-1">Bienvenue sur le Forum de découverte des métiers</h1>
+						<p class="lead">🌟 Inscrivez-vous aux Forums des Métiers Leader en France !</p>
+						<p>
+							<strong>✨ Explorez des Possibilités Illimitées ✨</strong><br>
+							Rencontrez des experts, échangez avec des professionnels et découvrez des opportunités dans divers secteurs. Que vous soyez étudiant, en reconversion, ou simplement curieux de nouvelles perspectives, nos forums sont le tremplin vers votre avenir.
+						</p>
+						<p>
+							<strong>🔍 Trouvez Votre Passion</strong><br>
+							Avec des représentants de multiples industries, de la tech à la santé, en passant par l'artisanat et le numérique, il y a toujours quelque chose pour éveiller votre intérêt.
+						</p>
+						<p>
+							<strong>🤝 Réseau, Formation, Carrière</strong><br>
+							Nos forums ne sont pas seulement des événements - c'est une communauté dynamique prête à vous soutenir dans votre parcours professionnel. Inscrivez-vous aujourd'hui et commencez à construire le réseau qui vous propulsera vers de nouveaux horizons.
+						</p>
+					</p>
+
+
+					{% if not app.user %}
+						<p>🔗 Rejoignez-nous dès maintenant !</p>
+						<div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+							<a href="{{ path('security.registration')}}" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">M'inscrire</a>
+							<a href="{{ path('security.login')}}" class="btn btn-outline-secondary btn-lg px-4">Me connecter</a>
+						</div>
+					{% endif %}
+				</div>
+				<div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+					<img class="rounded-lg-3" src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2664&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" width="720">
+				</div>
+			</div>
 		</div>
+
 	</div>
-
-
-{% endblock %}
+</div>{% endblock %}

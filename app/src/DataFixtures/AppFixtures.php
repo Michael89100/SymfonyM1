@@ -48,7 +48,7 @@ class AppFixtures extends Fixture
     for ($i = 0; $i < 100; $i++) {
       $activity = new Activity();
       $activity
-        ->setName($this->faker->words(3));
+        ->setName($this->faker->words(3, true));
       $activities[] = $activity;
       $manager->persist($activity);
     }
@@ -58,7 +58,7 @@ class AppFixtures extends Fixture
     for ($i = 0; $i < 100; $i++) {
       $skill = new Skill();
       $skill
-        ->setName($this->faker->words(5));
+        ->setName($this->faker->words(5, true));
       $skills[] = $skill;
       $manager->persist($skill);
     }
@@ -68,7 +68,7 @@ class AppFixtures extends Fixture
     for ($i = 0; $i < 100; $i++) {
       $job = new Job();
       $job
-        ->setName($this->faker->words(3));
+        ->setName($this->faker->words(3, true));
       for ($j = 0; $j < mt_rand(1, 5); $j++) {
         $job->addActivity($this->faker->randomElement($activities));
       }
@@ -84,7 +84,7 @@ class AppFixtures extends Fixture
     for ($i = 0; $i < 10; $i++) {
       $room = new Room();
       $room
-        ->setName($this->faker->words(2))
+        ->setName($this->faker->words(2, true))
         ->setCapacityMaximum(mt_rand(10, 100));
       $rooms[] = $room;
       $manager->persist($room);

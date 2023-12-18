@@ -23,7 +23,7 @@ class UserController extends AbstractController
    * @param EntityManagerInterface $manager
    * @return Response
    */
-  #[Route('/utilisateur/edition/{id}', name: 'user.edit')]
+  #[Route('/users/{id}/edit', name: 'user.edit')]
   public function index(
     User $user,
     Request $request,
@@ -71,7 +71,7 @@ class UserController extends AbstractController
    * @param EntityManagerInterface $manager
    * @return Response
    */
-  #[Route('/utilisateur/mot-de-passe/{id}', name: 'user.edit.password', methods: ['GET', 'POST'])]
+  #[Route('/users/{id}/change-password', name: 'user.edit.password', methods: ['GET', 'POST'])]
   public function editPassword(
     User $user,
     Request $request,

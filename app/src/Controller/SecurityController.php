@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
@@ -23,6 +24,11 @@ class SecurityController extends AbstractController
   #[Route('/connexion', name: 'security.login', methods: ['GET', 'POST'])]
   public function login(AuthenticationUtils $auth): Response
   {
+    // Interdire la route aux personnes déjà connectées
+    if ($this->getUser()) {
+      return $this->redirectToRoute('home.index');
+    }
+
     return $this->render('pages/security/login.html.twig', [
       'last_username' => $auth->getLastUsername(),
       'error' => $auth->getLastAuthenticationError(),
@@ -52,6 +58,11 @@ class SecurityController extends AbstractController
   #[Route('/inscription', name: 'security.registration', methods: ['GET', 'POST'])]
   public function registration(Request $request, EntityManagerInterface $manager): Response
   {
+    // Interdire la route aux personnes déjà connectées
+    if ($this->getUser()) {
+      return $this->redirectToRoute('home.index');
+    }
+
     $user = new User();
     $user->setRoles(['ROLE_USER']);
     $form = $this->createForm(RegistrationType::class, $user);

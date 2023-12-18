@@ -25,12 +25,14 @@ class AppFixtures extends Fixture
   {
     // Users
     $users = [];
-    for ($i = 0; $i < 10; $i++) {
+    for ($i = 0; $i < 30; $i++) {
       $user = new User();
-      $user->setFirstName($this->faker->name())
-        ->setLastName($this->faker->name())
+      $user
+        ->setFirstName($this->faker->firstName())
+        ->setLastName($this->faker->lastName())
         ->setEmail($this->faker->email())
         ->setRoles(['ROLE_USER'])
+        ->setPassword('password')
         ->setPlainPassword('password');
       $users[] = $user;
       $manager->persist($user);

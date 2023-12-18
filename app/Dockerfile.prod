@@ -1,0 +1,50 @@
+FROM php:8.2-fpm-alpine AS build
+
+## Installation des utilitaires
+RUN apk update && apk add curl git zip nodejs yarn
+
+## WHTMLTOPDF
+#RUN curl -LO https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.buster_amd64.deb && \
+#    apk update && apk install -y --no-install-recommends ./wkhtmltox_0.12.6-1.buster_amd64.deb && \
+#   rm wkhtmltox_0.12.6-1.buster_amd64.deb
+
+## Config Timezone
+RUN ln -s /usr/share/zoneinfo/Europe/Paris /etc/localtime
+
+## PHP Extensions & Composer
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+RUN install-php-extensions gd pdo_mysql intl zip bcmath && install-php-extensions @composer
+
+## Copie des sources
+ADD --chown=www-data:www-data build.tar.gz /var/www/
+
+WORKDIR /var/www/app
+
+## Installation
+RUN composer install && \
+    php bin/console assets:install && \
+    yarn install && \
+    yarn encore prod && \
+    chown -R www-data:www-data /var/www/app && \
+    rm -Rf node_modules
+
+FROM php:8.2-fpm-alpine AS final
+
+RUN apk update && apk add curl
+
+## Config Timezone
+RUN ln -s /usr/share/zoneinfo/Europe/Paris /etc/localtime
+
+## PHP Extensions & Composer
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+RUN install-php-extensions gd pdo_mysql intl zip bcmath && install-php-extensions @composer
+
+## Config PHP FPM
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+COPY project.ini "$PHP_INI_DIR/conf.d/prod.ini"
+COPY www.conf "/usr/local/etc/php-fpm.d/www.conf"
+
+## Copie des sources
+COPY --chown=www-data:www-data --from=build /var/www/app /var/www/app
+
+VOLUME ["/var/www/app"]

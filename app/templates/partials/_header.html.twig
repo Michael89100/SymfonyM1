@@ -16,21 +16,21 @@
 			<ul class="navbar-nav">
 				<ul class="navbar-nav me-auto">
 					{% if app.user %}
-						<li class="nav-item dropdown" style="margin-right: 5rem">
+						<li class="nav-item dropdown" style="margin-right: 10rem">
 							<a class="nav-link dropdown-toggle show" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">{{ app.user.firstName }}</a>
 							<div class="dropdown-menu show" data-bs-popper="static">
-								<a class="dropdown-item" href="#">Mes information</a>
-								<a class="dropdown-item" href="#">Modifier mon mot de passe</a>
+								<a class="dropdown-item" href="{{ path('user.edit', {'id': app.user.id}) }}">Mes information</a>
+								<a class="dropdown-item" href="{{ path('user.edit.password', {'id': app.user.id}) }}">Modifier mon mot de passe</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="#">Se déconnecter</a>
+								<a class="dropdown-item" href="{{ path('security.logout')}}">Se déconnecter</a>
 							</div>
 						</li>
 					{% else %}
 						<li class="nav-item">
-							<a class="nav-link active" href="#">Me connecter</a>
+							<a class="nav-link active" href="{{ path('security.login')}}">Me connecter</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link active" href="#">M'inscrire</a>
+							<a class="nav-link active" href="{{ path('security.registration')}}">M'inscrire</a>
 						</li>
 
 					{% endif %}

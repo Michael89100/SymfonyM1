@@ -27,8 +27,8 @@ class AppFixtures extends Fixture
     $users = [];
     for ($i = 0; $i < 10; $i++) {
       $user = new User();
-      $user->setFullname($this->faker->name())
-        ->setPseudo(mt_rand(0, 1) === 1 ? $this->faker->userName() : null)
+      $user->setFirstName($this->faker->name())
+        ->setLastName($this->faker->name())
         ->setEmail($this->faker->email())
         ->setRoles(['ROLE_USER'])
         ->setPlainPassword('password');

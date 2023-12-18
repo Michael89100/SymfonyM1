@@ -8,6 +8,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -56,7 +58,7 @@ class SecurityController extends AbstractController
    * @return Response
    */
   #[Route('/signin', name: 'security.registration', methods: ['GET', 'POST'])]
-  public function registration(Request $request, EntityManagerInterface $manager): Response
+  public function registration(Request $request, EntityManagerInterface $manager, MailerInterface $mailer): Response
   {
     // Interdire la route aux personnes déjà connectées
     if ($this->getUser()) {
@@ -74,6 +76,14 @@ class SecurityController extends AbstractController
       $user = $form->getData();
       $manager->persist($user);
       $manager->flush();
+
+      // Send email
+      $email = (new Email())
+        ->from('noreply@forumdesmetiers.com')
+        ->to($user->getEmail())
+        ->subject('Bienvenue sur le forum des métiers !')
+        ->html('<p>Bonjour ' . $user->getFirstName() . ',</p><p>Votre compte a bien été créé !</p>');
+      $mailer->send($email);
 
       $this->addFlash('success', 'Votre compte a bien été créé !');
 

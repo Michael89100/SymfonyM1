@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -56,10 +58,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     private ?string $plainPassword = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserAnswer::class)]
+    private Collection $userAnswers;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
+        $this->userAnswers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -200,5 +206,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, UserAnswer>
+     */
+    public function getUserAnswers(): Collection
+    {
+        return $this->userAnswers;
+    }
+
+    public function addUserAnswer(UserAnswer $userAnswer): static
+    {
+        if (!$this->userAnswers->contains($userAnswer)) {
+            $this->userAnswers->add($userAnswer);
+            $userAnswer->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserAnswer(UserAnswer $userAnswer): static
+    {
+        if ($this->userAnswers->removeElement($userAnswer)) {
+            // set the owning side to null (unless already changed)
+            if ($userAnswer->getUser() === $this) {
+                $userAnswer->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

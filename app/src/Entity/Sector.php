@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SectorRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SectorRepository::class)]
@@ -18,6 +20,14 @@ class Sector
 
     #[ORM\Column(length: 255)]
     private ?string $description = null;
+
+    #[ORM\OneToMany(mappedBy: 'sector', targetEntity: Workshop::class, orphanRemoval: true)]
+    private Collection $workshops;
+
+    public function __construct()
+    {
+        $this->workshops = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -44,6 +54,36 @@ class Sector
     public function setDescription(string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Workshop>
+     */
+    public function getWorkshops(): Collection
+    {
+        return $this->workshops;
+    }
+
+    public function addWorkshop(Workshop $workshop): static
+    {
+        if (!$this->workshops->contains($workshop)) {
+            $this->workshops->add($workshop);
+            $workshop->setSector($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWorkshop(Workshop $workshop): static
+    {
+        if ($this->workshops->removeElement($workshop)) {
+            // set the owning side to null (unless already changed)
+            if ($workshop->getSector() === $this) {
+                $workshop->setSector(null);
+            }
+        }
 
         return $this;
     }

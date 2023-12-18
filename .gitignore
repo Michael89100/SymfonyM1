@@ -53,3 +53,6 @@
 
 .vscode
 .idea
+
+infra/volumes/*
+*.log

@@ -19,6 +19,13 @@ class Speaker
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $resgistrationAt = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?User $user = null;
+
+    #[ORM\ManyToOne(inversedBy: 'speakers')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Edition $edition = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +51,30 @@ class Speaker
     public function setResgistrationAt(?\DateTimeImmutable $resgistrationAt): static
     {
         $this->resgistrationAt = $resgistrationAt;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getEdition(): ?Edition
+    {
+        return $this->edition;
+    }
+
+    public function setEdition(?Edition $edition): static
+    {
+        $this->edition = $edition;
 
         return $this;
     }

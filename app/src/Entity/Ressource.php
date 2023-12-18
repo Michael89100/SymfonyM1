@@ -22,6 +22,10 @@ class Ressource
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
+    #[ORM\ManyToOne(inversedBy: 'resource')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Workshop $workshop = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +63,18 @@ class Ressource
     public function setDescription(string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getWorkshop(): ?Workshop
+    {
+        return $this->workshop;
+    }
+
+    public function setWorkshop(?Workshop $workshop): static
+    {
+        $this->workshop = $workshop;
 
         return $this;
     }

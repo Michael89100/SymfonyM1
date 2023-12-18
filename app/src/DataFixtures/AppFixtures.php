@@ -4,8 +4,11 @@ namespace App\DataFixtures;
 
 use App\Entity\Activity;
 use App\Entity\Job;
+use App\Entity\Resource;
+use App\Entity\Room;
 use App\Entity\Skill;
 use App\Entity\User;
+use App\Entity\Workshop;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -45,7 +48,7 @@ class AppFixtures extends Fixture
     for ($i = 0; $i < 100; $i++) {
       $activity = new Activity();
       $activity
-        ->setName($this->faker->sentence(3));
+        ->setName($this->faker->words(3));
       $activities[] = $activity;
       $manager->persist($activity);
     }
@@ -55,7 +58,7 @@ class AppFixtures extends Fixture
     for ($i = 0; $i < 100; $i++) {
       $skill = new Skill();
       $skill
-        ->setName($this->faker->sentence(5));
+        ->setName($this->faker->words(5));
       $skills[] = $skill;
       $manager->persist($skill);
     }
@@ -65,7 +68,7 @@ class AppFixtures extends Fixture
     for ($i = 0; $i < 100; $i++) {
       $job = new Job();
       $job
-        ->setName($this->faker->sentence(3));
+        ->setName($this->faker->words(3));
       for ($j = 0; $j < mt_rand(1, 5); $j++) {
         $job->addActivity($this->faker->randomElement($activities));
       }
@@ -75,6 +78,29 @@ class AppFixtures extends Fixture
       $jobs[] = $job;
       $manager->persist($job);
     }
+
+    // Rooms
+    $rooms = [];
+    for ($i = 0; $i < 10; $i++) {
+      $room = new Room();
+      $room
+        ->setName($this->faker->words(2))
+        ->setCapacityMaximum(mt_rand(10, 100));
+      $rooms[] = $room;
+      $manager->persist($room);
+    }
+
+    // Resources
+    // $resources = [];
+    // for ($i = 0; $i < 100; $i++) {
+    //   $resource = new Resource();
+    //   $resource
+    //     ->setName($this->faker->sentence(1))
+    //     ->setDescription($this->faker->sentence(mt_rand(5, 10)))
+    //     ->setUrl($this->faker->url());
+    //   $resources[] = $resource;
+    //   $manager->persist($resource);
+    // }
 
     $manager->flush();
   }

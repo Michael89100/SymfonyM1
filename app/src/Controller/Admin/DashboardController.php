@@ -61,29 +61,29 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         return [
-            MenuItem::section('General'),
-            MenuItem::linkToCrud('Users', 'fa fa-user', User::class),
-            MenuItem::linkToCrud('Speakers', 'fa fa-headphones', Speaker::class),
+            MenuItem::section('Général'),
+            MenuItem::linkToCrud('Utilisateurs', 'fa fa-user', User::class),
+            MenuItem::linkToCrud('Intervenants', 'fa fa-headphones', Speaker::class),
             MenuItem::linkToCrud('Edition', 'fa fa-calendar', Edition::class),
 
-            MenuItem::section('Student'),
-            MenuItem::linkToCrud('Students', 'fa fa-graduation-cap', Student::class),
-            MenuItem::linkToCrud('Schools', 'fa fa-school', School::class),
-            MenuItem::linkToCrud('Sections', 'fa fa-glasses', Section::class),
+            MenuItem::section('Elèves'),
+            MenuItem::linkToCrud('Lycéens', 'fa fa-graduation-cap', Student::class),
+            MenuItem::linkToCrud('Ecoles', 'fa fa-school', School::class),
+            MenuItem::linkToCrud('Classes', 'fa fa-glasses', Section::class),
 
-            MenuItem::section('Workshop'),
-            MenuItem::linkToCrud('Workshops', 'fa fa-chalkboard-user', Workshop::class),
-            MenuItem::linkToCrud('Rooms', 'fa fa-people-roof', Room::class),
-            MenuItem::linkToCrud('Jobs', 'fa fa-user-doctor', Job::class),
-            MenuItem::linkToCrud('Skills', 'fa fa-book', Skill::class),
-            MenuItem::linkToCrud('Activities', 'fa fa-chart-line', Activity::class),
-            MenuItem::linkToCrud('Resources', 'fa fa-shopify', Resource::class),
-            MenuItem::linkToCrud('Sectors', 'fa fa-location-crosshairs', Sector::class),
+            MenuItem::section('Ateliers'),
+            MenuItem::linkToCrud('Ateliers', 'fa fa-chalkboard-user', Workshop::class),
+            MenuItem::linkToCrud('Salles', 'fa fa-people-roof', Room::class),
+            MenuItem::linkToCrud('Métiers', 'fa fa-user-doctor', Job::class),
+            MenuItem::linkToCrud('Compétences', 'fa fa-book', Skill::class),
+            MenuItem::linkToCrud('Activités', 'fa fa-chart-line', Activity::class),
+            MenuItem::linkToCrud('Ressources', 'fa fa-shopify', Resource::class),
+            MenuItem::linkToCrud('Secteurs', 'fa fa-location-crosshairs', Sector::class),
 
-            MenuItem::section('Quiz'),
-            MenuItem::linkToCrud('Quizzes', 'fa fa-clipboard-question', Quiz::class),
+            MenuItem::section('Quizz'),
+            MenuItem::linkToCrud('Quizz', 'fa fa-clipboard-question', Quiz::class),
             MenuItem::linkToCrud('Questions', 'fa fa-question', Question::class),
-            MenuItem::linkToCrud('Users answers', 'fa fa-id-badge', UserAnswer::class),
+            MenuItem::linkToCrud('Réponses utilisateurs', 'fa fa-id-badge', UserAnswer::class),
         ];
     }
 }

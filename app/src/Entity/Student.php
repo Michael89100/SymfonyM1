@@ -48,6 +48,11 @@ class Student
         return $this->id;
     }
 
+    public function getUserId(): ?int
+    {
+        return $this->user?->getId();
+    }
+
     public function getSchoolEmail(): ?string
     {
         return $this->schoolEmail;

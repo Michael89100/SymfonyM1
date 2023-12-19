@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum des métiers - Inscription aux ateliers de {{ year }} {% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Liste des métiers</h1>
+    <div class="count mt-4">
+        Il y a
+        {# {{ workshops.getTotalItemCount }} #}
+        forums au total.
+    </div>
+    <table class="table mt-4">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Atelier</th>
+                <th scope="col">Date</th>
+                <th scope="col">actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for workshop in workshops %}
+            <tr class="table-primary">
+                <td>{{ workshop.name }}</td>
+                <td>{{ workshop.startAt | format_datetime(locale='fr') }}</td>
+                <td>
+                    <a class="btn btn-success" href="{{ path('job.show', {'id': workshop.id}) }}">Voir</a>
+                    <a class="btn btn-info" href="{{ path('job.edit', {'id': workshop.id}) }}">Editer</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3">Pas d'ateliers trouvés</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}

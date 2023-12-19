@@ -14,7 +14,7 @@ class UserAnswer
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private ?string $response = null;
 
     #[ORM\ManyToOne(inversedBy: 'userAnswers')]
     private ?Question $question = null;
@@ -31,14 +31,14 @@ class UserAnswer
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getResponse(): ?string
     {
-        return $this->name;
+        return $this->response;
     }
 
-    public function setName(string $name): static
+    public function setResponse(string $response): static
     {
-        $this->name = $name;
+        $this->response = $response;
 
         return $this;
     }

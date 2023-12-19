@@ -20,6 +20,7 @@ use App\Entity\Workshop;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -28,7 +29,10 @@ class DashboardController extends AbstractDashboardController
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
-        return parent::index();
+        $routeBuilder = $this->container->get(AdminUrlGenerator::class);
+        $url = $routeBuilder->setController(UserCrudController::class)->generateUrl();
+
+        return $this->redirect($url);
 
         // Option 1. You can make your dashboard redirect to some common page of your backend
         //
@@ -56,12 +60,10 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         return [
-            MenuItem::linkToDashboard('Dashboard', 'fa fa-home'),
-
             MenuItem::section('General'),
             MenuItem::linkToCrud('Users', 'fa fa-user', User::class),
             MenuItem::linkToCrud('Speakers', 'fa fa-headphones', Speaker::class),
-            MenuItem::linkToCrud('Speakers', 'fa fa-calendar', Edition::class),
+            MenuItem::linkToCrud('Edition', 'fa fa-calendar', Edition::class),
 
             MenuItem::section('Student'),
             MenuItem::linkToCrud('Schools', 'fa fa-school', School::class),
@@ -69,7 +71,6 @@ class DashboardController extends AbstractDashboardController
 
             MenuItem::section('Workshop'),
             MenuItem::linkToCrud('Workshops', 'fa fa-cahlkboard-user', Workshop::class),
-            MenuItem::linkToCrud('Rooms', 'fa fa-people-roof', Room::class),
             MenuItem::linkToCrud('Rooms', 'fa fa-people-roof', Room::class),
             MenuItem::linkToCrud('Jobs', 'fa fa-doctor', Job::class),
             MenuItem::linkToCrud('Skills', 'fa fa-book', Skill::class),

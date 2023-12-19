@@ -41,7 +41,7 @@ class AppFixtures extends Fixture
   {
     // Users
     $users = [];
-    for ($i = 0; $i < 30; $i++) {
+    for ($i = 0; $i < 50; $i++) {
       $user = new User();
       $user
         ->setFirstName($this->faker->firstName())
@@ -52,10 +52,11 @@ class AppFixtures extends Fixture
       $users[] = $user;
       $manager->persist($user);
     }
+    $usersTemp = $users;
 
     // Activity
     $activities = [];
-    for ($i = 0; $i < 30; $i++) {
+    for ($i = 0; $i < 20; $i++) {
       $activity = new Activity();
       $activity
         ->setName($this->faker->words(3, true));
@@ -65,7 +66,7 @@ class AppFixtures extends Fixture
 
     // Skills
     $skills = [];
-    for ($i = 0; $i < 30; $i++) {
+    for ($i = 0; $i < 50; $i++) {
       $skill = new Skill();
       $skill
         ->setName($this->faker->words(5, true));
@@ -91,7 +92,7 @@ class AppFixtures extends Fixture
 
     // Rooms
     $rooms = [];
-    for ($i = 0; $i < 10; $i++) {
+    for ($i = 0; $i < 15; $i++) {
       $room = new Room();
       $room
         ->setName($this->faker->words(2, true))
@@ -113,7 +114,7 @@ class AppFixtures extends Fixture
 
     // Edition
     $editions = [];
-    for ($i = 0; $i < 5; $i++) {
+    for ($i = 0; $i < 50; $i++) {
       $edition = new Edition();
       $edition
         ->setYear($this->faker->year())
@@ -126,7 +127,7 @@ class AppFixtures extends Fixture
 
     // Schools
     $schools = [];
-    for ($i = 0; $i < 50; $i++) {
+    for ($i = 0; $i < 100; $i++) {
       $school = new School();
       $school
         ->setName($this->faker->words(3, true))
@@ -140,7 +141,7 @@ class AppFixtures extends Fixture
 
     // Section
     $sections = [];
-    for ($i = 0; $i < 15; $i++) {
+    for ($i = 0; $i < 40; $i++) {
       $section = new Section();
       $section
         ->setName($this->faker->words(3, true));
@@ -149,36 +150,40 @@ class AppFixtures extends Fixture
     }
 
     // Students
-    // $students = [];
-    // for ($i = 0; $i < 100; $i++) {
-    //   $student = new Student();
-    //   $student
-    //     ->setSchoolEmail($this->faker->email())
-    //     ->setRegistrationAt(DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-1 year', '+1 year')))
-    //     ->setSchool($this->faker->randomElement($schools))
-    //     ->setSection($this->faker->randomElement($sections))
-    //     ->setUser($this->faker->randomElement($users))
-    //     ->setEdition($this->faker->randomElement($editions));
-    //   $students[] = $student;
-    //   $manager->persist($student);
-    // }
+    $students = [];
+    for ($i = 0; $i < 40; $i++) {
+      $randomIndex = array_rand($usersTemp);
+      $student = new Student();
+      $student
+        ->setSchoolEmail($this->faker->email())
+        ->setRegistrationAt(DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-1 year', '+1 year')))
+        ->setSchool($this->faker->randomElement($schools))
+        ->setSection($this->faker->randomElement($sections))
+        ->setUser($usersTemp[$randomIndex])
+        ->setEdition($this->faker->randomElement($editions));
+      $students[] = $student;
+      unset($usersTemp[$randomIndex]);
+      $manager->persist($student);
+    }
 
     // Speakers
-    // $speakers = [];
-    // for ($i = 0; $i < 100; $i++) {
-    //   $speaker = new Speaker();
-    //   $speaker
-    //     ->setSocialEmail($this->faker->email())
-    //     ->setResgistrationAt(DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-1 year', '+1 year')))
-    //     ->setUser($this->faker->randomElement($users))
-    //     ->setEdition($this->faker->randomElement($editions));
-    //   $speakers[] = $speaker;
-    //   $manager->persist($speaker);
-    // }
+    $speakers = [];
+    for ($i = 0; $i < 10; $i++) {
+      $randomIndex = array_rand($usersTemp);
+      $speaker = new Speaker();
+      $speaker
+        ->setSocialEmail($this->faker->email())
+        ->setResgistrationAt(DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-1 year', '+1 year')))
+        ->setUser($usersTemp[$randomIndex])
+        ->setEdition($this->faker->randomElement($editions));
+      $speakers[] = $speaker;
+      unset($usersTemp[$randomIndex]);
+      $manager->persist($speaker);
+    }
 
     // Quiz
     $quizzes = [];
-    for ($i = 0; $i < 10; $i++) {
+    for ($i = 0; $i < 50; $i++) {
       $quiz = new Quiz();
       $quiz
         ->setName($this->faker->words(2, true))
@@ -189,7 +194,7 @@ class AppFixtures extends Fixture
 
     // Question
     $questions = [];
-    for ($i = 0; $i < 50; $i++) {
+    for ($i = 0; $i < 100; $i++) {
       $question = new Question();
       $question
         ->setName($this->faker->words(7, true))
@@ -201,7 +206,7 @@ class AppFixtures extends Fixture
 
     // UserAnswer
     $userAnswers = [];
-    for ($i = 0; $i < 100; $i++) {
+    for ($i = 0; $i < 50; $i++) {
       $userAnswer = new UserAnswer();
       $userAnswer
         ->setResponse($this->faker->words(3, true))
@@ -223,9 +228,9 @@ class AppFixtures extends Fixture
         ->setRoom($this->faker->randomElement($rooms))
         ->setSector($this->faker->randomElement($sectors))
         ->setEdition($this->faker->randomElement($editions));
-      // for ($w = 0; $w < mt_rand(1, 5); $w++) {
-      //   $workshop->addStudent($this->faker->randomElement($students));
-      // }
+      for ($w = 0; $w < mt_rand(1, 5); $w++) {
+        $workshop->addStudent($this->faker->randomElement($students));
+      }
       for ($j = 0; $j < mt_rand(1, 5); $j++) {
         $workshop->addJob($this->faker->randomElement($jobs));
       }

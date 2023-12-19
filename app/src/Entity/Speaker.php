@@ -31,6 +31,11 @@ class Speaker
         return $this->id;
     }
 
+    public function getUserId(): ?int
+    {
+        return $this->user?->getId();
+    }
+
     public function getSocialEmail(): ?string
     {
         return $this->socialEmail;

@@ -34,7 +34,7 @@ class Workshop
     #[ORM\ManyToMany(targetEntity: Job::class, inversedBy: 'workshops')]
     private Collection $jobs;
 
-    #[ORM\OneToMany(mappedBy: 'workshop', targetEntity: Ressource::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'workshop', targetEntity: Resource::class, orphanRemoval: true)]
     private Collection $resource;
 
     #[ORM\ManyToOne(inversedBy: 'workshops')]
@@ -152,7 +152,7 @@ class Workshop
         return $this->resource;
     }
 
-    public function addResource(Ressource $resource): static
+    public function addResource(Resource $resource): static
     {
         if (!$this->resource->contains($resource)) {
             $this->resource->add($resource);
@@ -162,7 +162,7 @@ class Workshop
         return $this;
     }
 
-    public function removeResource(Ressource $resource): static
+    public function removeResource(Resource $resource): static
     {
         if ($this->resource->removeElement($resource)) {
             // set the owning side to null (unless already changed)

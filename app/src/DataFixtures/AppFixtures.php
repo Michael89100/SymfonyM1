@@ -27,6 +27,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use DateTimeImmutable;
 use Symfony\Component\Validator\Constraints\Date;
 
+
 class AppFixtures extends Fixture
 {
   /**

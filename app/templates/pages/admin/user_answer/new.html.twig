@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New UserAnswer{% endblock %}
+
+{% block body %}
+    <h1>Create new UserAnswer</h1>
+
+    {{ include('pages/admin/user_answer/_form.html.twig') }}
+
+    <a href="{{ path('app_user_answer_index') }}">back to list</a>
+{% endblock %}

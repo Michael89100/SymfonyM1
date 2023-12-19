@@ -59,9 +59,16 @@ class Job
     /**
      * @return Collection<int, Activity>
      */
-    public function getActivity(): Collection
+    public function getActivities(): Collection
     {
         return $this->activities;
+    }
+
+    public function setActivities(Collection $activities): static
+    {
+        $this->activities = $activities;
+
+        return $this;
     }
 
     public function addActivity(Activity $activity): static
@@ -86,6 +93,12 @@ class Job
     public function getSkills(): Collection
     {
         return $this->skills;
+    }
+    public function setSkills(Collection $skills): static
+    {
+        $this->skills = $skills;
+
+        return $this;
     }
 
     public function addSkill(Skill $skill): static

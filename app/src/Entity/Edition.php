@@ -219,4 +219,9 @@ class Edition
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return strval($this->year);
+    }
 }

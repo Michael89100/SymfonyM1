@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Workshop{% endblock %}
+
+{% block body %}
+    <h1>Create new Workshop</h1>
+
+    {{ include('pages/admin/workshop/_form.html.twig') }}
+
+    <a href="{{ path('app_workshop_index') }}">back to list</a>
+{% endblock %}

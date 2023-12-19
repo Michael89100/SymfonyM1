@@ -16,7 +16,7 @@ class Student
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $scoolEmail = null;
+    private ?string $schoolEmail = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $registrationAt = null;
@@ -48,14 +48,14 @@ class Student
         return $this->id;
     }
 
-    public function getScoolEmail(): ?string
+    public function getSchoolEmail(): ?string
     {
-        return $this->scoolEmail;
+        return $this->schoolEmail;
     }
 
-    public function setScoolEmail(string $scoolEmail): static
+    public function setSchoolEmail(string $schoolEmail): static
     {
-        $this->scoolEmail = $scoolEmail;
+        $this->schoolEmail = $schoolEmail;
 
         return $this;
     }

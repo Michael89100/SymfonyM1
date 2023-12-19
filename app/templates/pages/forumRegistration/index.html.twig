@@ -4,11 +4,16 @@
 
 {% block body %}
 <div class="container mt-4">
-    <h1>Liste des métiers</h1>
+    <h1>Liste des ateliers de l'année</h1>
     <div class="count mt-4">
         Il y a
-        {# {{ workshops.getTotalItemCount }} #}
-        forums au total.
+        {{ workshops|length }}
+        {% if workshops|length > 1 %}
+        ateliers 
+        {% else %}
+        atelier
+        {% endif %}
+        au total.
     </div>
     <table class="table mt-4">
         <thead>
@@ -30,7 +35,7 @@
             </tr>
             {% else %}
             <tr>
-                <td colspan="3">Pas d'ateliers trouvés</td>
+                <td class="table-warning" colspan="3">Pas d'ateliers trouvés 😱</td>
             </tr>
             {% endfor %}
         </tbody>

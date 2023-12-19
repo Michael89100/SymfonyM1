@@ -2,31 +2,25 @@
 
 namespace App\Form;
 
-use App\Entity\Question;
-use App\Entity\Quiz;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Sector;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class QuestionType extends AbstractType
+class SectorType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('name')
-            ->add('type')
-            ->add('quiz', EntityType::class, [
-                'class' => Quiz::class,
-                'choice_label' => 'id',
-            ])
+            ->add('description')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Question::class,
+            'data_class' => Sector::class,
         ]);
     }
 }

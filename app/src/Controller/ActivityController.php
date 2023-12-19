@@ -39,7 +39,7 @@ class ActivityController extends AbstractController
             $entityManager->persist($activity);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_activity_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('activity.index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('pages/admin/activity/new.html.twig', [
@@ -71,7 +71,7 @@ class ActivityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_activity_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('activity.index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('pages/admin/activity/edit.html.twig', [
@@ -91,6 +91,6 @@ class ActivityController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_activity_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('activity.index', [], Response::HTTP_SEE_OTHER);
     }
 }

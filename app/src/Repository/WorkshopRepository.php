@@ -21,28 +21,13 @@ class WorkshopRepository extends ServiceEntityRepository
         parent::__construct($registry, Workshop::class);
     }
 
-//    /**
-//     * @return Workshop[] Returns an array of Workshop objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('w')
-//            ->andWhere('w.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('w.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Workshop
-//    {
-//        return $this->createQueryBuilder('w')
-//            ->andWhere('w.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findWorkshopsByYear(int $editionYear): array
+    {
+        return $this->createQueryBuilder('w')
+            ->join('w.edition', 'e')
+            ->where('e.year = :editionYear')
+            ->setParameter('editionYear', $editionYear)
+            ->getQuery()
+            ->getResult();
+    }
 }

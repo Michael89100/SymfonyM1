@@ -18,12 +18,15 @@ use App\Entity\Question;
 use App\Entity\UserAnswer;
 use App\Entity\User;
 use App\Entity\Workshop;
+use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use DateTimeImmutable;
+use Symfony\Component\Validator\Constraints\Date;
+
 
 class AppFixtures extends Fixture
 {
@@ -76,7 +79,7 @@ class AppFixtures extends Fixture
 
     // Job
     $jobs = [];
-    for ($i = 0; $i < 30; $i++) {
+    for ($i = 0; $i < 20; $i++) {
       $job = new Job();
       $job
         ->setName($this->faker->words(3, true));
@@ -103,7 +106,7 @@ class AppFixtures extends Fixture
 
     // Sector
     $sectors = [];
-    for ($i = 0; $i < 30; $i++) {
+    for ($i = 0; $i < 10; $i++) {
       $sector = new Sector();
       $sector
         ->setName($this->faker->words(3, true))
@@ -114,12 +117,15 @@ class AppFixtures extends Fixture
 
     // Edition
     $editions = [];
-    for ($i = 0; $i < 50; $i++) {
+    for ($i = 0; $i < 2; $i++) {
       $edition = new Edition();
+      // 2 mai de l'année en cours à 8h
+      $dateStart = new DateTime(2023 + $i . '-05-02 08:00:00');
+      $dateEnd = new DateTime(2023 + $i . '-05-02 18:00:00');
       $edition
-        ->setYear($this->faker->year())
-        ->setStartAt(DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-1 year', '+1 year')))
-        ->setEndAt(DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-1 year', '+1 year')))
+        ->setYear(2023 + $i)
+        ->setStartAt(DateTimeImmutable::createFromMutable($dateStart))
+        ->setEndAt(DateTimeImmutable::createFromMutable($dateEnd))
         ->setAdress($this->faker->address());
       $editions[] = $edition;
       $manager->persist($edition);
@@ -127,24 +133,25 @@ class AppFixtures extends Fixture
 
     // Schools
     $schools = [];
-    for ($i = 0; $i < 100; $i++) {
+    for ($i = 0; $i < 10; $i++) {
       $school = new School();
       $school
         ->setName($this->faker->words(3, true))
         ->setAdress($this->faker->address())
         ->setCity($this->faker->city())
         ->setPostalCode(intval($this->faker->postcode()))
-        ->setCountry($this->faker->country());
+        ->setCountry("France");
       $schools[] = $school;
       $manager->persist($school);
     }
 
     // Section
     $sections = [];
-    for ($i = 0; $i < 40; $i++) {
+    for ($i = 0; $i < 3; $i++) {
       $section = new Section();
+      $sectionsString = ['seconde', 'première', 'terminale'];
       $section
-        ->setName($this->faker->words(3, true));
+        ->setName($sectionsString[$i]);
       $sections[] = $section;
       $manager->persist($section);
     }
@@ -183,7 +190,7 @@ class AppFixtures extends Fixture
 
     // Quiz
     $quizzes = [];
-    for ($i = 0; $i < 50; $i++) {
+    for ($i = 0; $i < 5; $i++) {
       $quiz = new Quiz();
       $quiz
         ->setName($this->faker->words(2, true))
@@ -194,7 +201,7 @@ class AppFixtures extends Fixture
 
     // Question
     $questions = [];
-    for ($i = 0; $i < 100; $i++) {
+    for ($i = 0; $i < 30; $i++) {
       $question = new Question();
       $question
         ->setName($this->faker->words(7, true))
@@ -206,7 +213,7 @@ class AppFixtures extends Fixture
 
     // UserAnswer
     $userAnswers = [];
-    for ($i = 0; $i < 50; $i++) {
+    for ($i = 0; $i < 100; $i++) {
       $userAnswer = new UserAnswer();
       $userAnswer
         ->setResponse($this->faker->words(3, true))
@@ -220,14 +227,17 @@ class AppFixtures extends Fixture
     $workshops = [];
     for ($i = 0; $i < 20; $i++) {
       $workshop = new Workshop();
+      $edition = $this->faker->randomElement($editions);
+      $randomHours = rand(1, 6);
+      $startAt = $edition->getStartAt()->modify("+$randomHours hour");
       $workshop
         ->setName($this->faker->words(3, true))
         ->setDescription($this->faker->words(10, true))
-        ->setStartAt(DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-1 year', '+1 year')))
-        ->setEndAt(DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-1 year', '+1 year')))
         ->setRoom($this->faker->randomElement($rooms))
         ->setSector($this->faker->randomElement($sectors))
-        ->setEdition($this->faker->randomElement($editions));
+        ->setEdition($this->faker->randomElement($editions))
+        ->setStartAt($startAt)
+        ->setEndAt($startAt->modify('+1 hour'));
       for ($w = 0; $w < mt_rand(1, 5); $w++) {
         $workshop->addStudent($this->faker->randomElement($students));
       }
@@ -240,7 +250,7 @@ class AppFixtures extends Fixture
 
     // Resources
     $resources = [];
-    for ($i = 0; $i < 100; $i++) {
+    for ($i = 0; $i < 20; $i++) {
       $resource = new Resource();
       $resource
         ->setName($this->faker->sentence(1))

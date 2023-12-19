@@ -14,10 +14,10 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/user/answer')]
 class UserAnswerController extends AbstractController
 {
-    #[Route('/', name: 'user_answerindex', methods: ['GET'])]
+    #[Route('/', name: 'user_answer.index', methods: ['GET'])]
     public function index(UserAnswerRepository $userAnswerRepository): Response
     {
-        return $this->render('user_answer/index.html.twig', [
+        return $this->render('pages/admin/user_answer/index.html.twig', [
             'user_answers' => $userAnswerRepository->findAll(),
         ]);
     }
@@ -33,10 +33,10 @@ class UserAnswerController extends AbstractController
             $entityManager->persist($userAnswer);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_user_answer_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('user_answer.index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('user_answer/new.html.twig', [
+        return $this->render('pages/admin/user_answer/new.html.twig', [
             'user_answer' => $userAnswer,
             'form' => $form,
         ]);
@@ -45,7 +45,7 @@ class UserAnswerController extends AbstractController
     #[Route('/{id}', name: 'user_answer.show', methods: ['GET'])]
     public function show(UserAnswer $userAnswer): Response
     {
-        return $this->render('user_answer/show.html.twig', [
+        return $this->render('pages/admin/user_answer/show.html.twig', [
             'user_answer' => $userAnswer,
         ]);
     }
@@ -59,10 +59,10 @@ class UserAnswerController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_user_answer_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('user_answer.index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('user_answer/edit.html.twig', [
+        return $this->render('pages/admin/user_answer/edit.html.twig', [
             'user_answer' => $userAnswer,
             'form' => $form,
         ]);
@@ -76,6 +76,6 @@ class UserAnswerController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_user_answer_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('user_answer.index', [], Response::HTTP_SEE_OTHER);
     }
 }

@@ -33,7 +33,7 @@ class QuizController extends AbstractController
             $entityManager->persist($quiz);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_quiz_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('quiz.index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('pages/admin/quiz/new.html.twig', [
@@ -45,7 +45,7 @@ class QuizController extends AbstractController
     #[Route('/{id}', name: 'quiz.show', methods: ['GET'])]
     public function show(Quiz $quiz): Response
     {
-        return $this->render('quiz/show.html.twig', [
+        return $this->render('pages/admin/quiz/show.html.twig', [
             'quiz' => $quiz,
         ]);
     }
@@ -59,10 +59,10 @@ class QuizController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_quiz_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('quiz.index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('quiz/edit.html.twig', [
+        return $this->render('pages/admin/quiz/edit.html.twig', [
             'quiz' => $quiz,
             'form' => $form,
         ]);
@@ -76,6 +76,6 @@ class QuizController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_quiz_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('quiz.index', [], Response::HTTP_SEE_OTHER);
     }
 }

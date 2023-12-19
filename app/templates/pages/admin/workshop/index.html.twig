@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Workshop index{% endblock %}
+
+{% block body %}
+    <h1>Workshop index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>StartAt</th>
+                <th>EndAt</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for workshop in workshops %}
+            <tr>
+                <td>{{ workshop.id }}</td>
+                <td>{{ workshop.startAt ? workshop.startAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ workshop.endAt ? workshop.endAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ workshop.name }}</td>
+                <td>{{ workshop.description }}</td>
+                <td>
+                    <a href="{{ path('app_workshop_show', {'id': workshop.id}) }}">show</a>
+                    <a href="{{ path('app_workshop_edit', {'id': workshop.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_workshop_new') }}">Create new</a>
+{% endblock %}

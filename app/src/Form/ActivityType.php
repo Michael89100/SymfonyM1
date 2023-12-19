@@ -14,13 +14,7 @@ class ActivityType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('jobs', EntityType::class, [
-                'class' => Job::class,
-'choice_label' => 'id',
-'multiple' => true,
-            ])
-        ;
+            ->add('name');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

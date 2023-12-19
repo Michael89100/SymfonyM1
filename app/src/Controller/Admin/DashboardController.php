@@ -14,6 +14,7 @@ use App\Entity\Section;
 use App\Entity\Sector;
 use App\Entity\Skill;
 use App\Entity\Speaker;
+use App\Entity\Student;
 use App\Entity\User;
 use App\Entity\UserAnswer;
 use App\Entity\Workshop;
@@ -66,13 +67,14 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Edition', 'fa fa-calendar', Edition::class),
 
             MenuItem::section('Student'),
+            MenuItem::linkToCrud('Students', 'fa fa-graduation-cap', Student::class),
             MenuItem::linkToCrud('Schools', 'fa fa-school', School::class),
-            MenuItem::linkToCrud('Sections', 'fa fa-graduation-cap', Section::class),
+            MenuItem::linkToCrud('Sections', 'fa fa-glasses', Section::class),
 
             MenuItem::section('Workshop'),
-            MenuItem::linkToCrud('Workshops', 'fa fa-cahlkboard-user', Workshop::class),
+            MenuItem::linkToCrud('Workshops', 'fa fa-chalkboard-user', Workshop::class),
             MenuItem::linkToCrud('Rooms', 'fa fa-people-roof', Room::class),
-            MenuItem::linkToCrud('Jobs', 'fa fa-doctor', Job::class),
+            MenuItem::linkToCrud('Jobs', 'fa fa-user-doctor', Job::class),
             MenuItem::linkToCrud('Skills', 'fa fa-book', Skill::class),
             MenuItem::linkToCrud('Activities', 'fa fa-chart-line', Activity::class),
             MenuItem::linkToCrud('Resources', 'fa fa-shopify', Resource::class),

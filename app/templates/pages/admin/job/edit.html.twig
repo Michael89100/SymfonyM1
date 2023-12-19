@@ -1,13 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Job{% endblock %}
+{% block title %}Modification d'un métier{% endblock %}
 
 {% block body %}
-    <h1>Edit Job</h1>
+<div class="container mt-4">
+    <h1>Modifier un métier</h1>
 
     {{ include('pages/admin/job/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('job.index') }}">back to list</a>
+    <a class="btn btn-primary mt-4" href="{{ path('job.index') }}">Retour à la liste</a>
+    <a class="btn btn-success mt-4" href="{{ path('skill.new') }}">Ajouter de nouvelles compétences</a>
+    <a class="btn btn-success mt-4" href="{{ path('activity.new') }}">Ajouter de nouvelles activités</a>
 
     {{ include('pages/admin/job/_delete_form.html.twig') }}
+</div>
 {% endblock %}

@@ -6,6 +6,7 @@ use App\Entity\Job;
 use App\Form\JobType;
 use App\Repository\JobRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,10 +16,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class JobController extends AbstractController
 {
     #[Route('/', name: 'job.index', methods: ['GET'])]
-    public function index(JobRepository $jobRepository): Response
+    public function index(JobRepository $jobRepository, PaginatorInterface $paginator, Request $request): Response
     {
+
+        $jobs = $paginator->paginate(
+            $jobRepository->findAll(),
+            $request->query->getInt('page', 1),
+            10
+        );
         return $this->render('pages/admin/job/index.html.twig', [
-            'jobs' => $jobRepository->findAll(),
+            'jobs' => $jobs,
         ]);
     }
 
@@ -53,7 +60,9 @@ class JobController extends AbstractController
     #[Route('/{id}/edit', name: 'job.edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Job $job, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(JobType::class, $job);
+        $form = $this->createForm(JobType::class, $job, [
+            'action' => 'edit',
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

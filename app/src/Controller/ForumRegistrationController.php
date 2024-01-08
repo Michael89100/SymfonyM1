@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/forum-subscription', name: 'forum-subscription')]
 class ForumRegistrationController extends AbstractController
 {
-  #[Route('/', name: 'forum-subscription.index')]
+  #[Route('/', name: '.index')]
   public function index(WorkshopRepository $workshopRepository, PaginatorInterface $paginator, Request $request)
   {
     // récupération des workshops dont l'édition est sur l'année en cours

@@ -1,3 +1,4 @@
+{% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
 {% extends "base.html.twig" %}
 
 {% block title %}Forum des métiers - Accueil
@@ -44,7 +45,12 @@
 					</p>
 
 
-					{% if not app.user %}
+					{% if app.user %}
+						<p>Inscrivez-vous sur l'un de nos ateliers !</p>
+						<div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+							<a href="{{ path('forum-subscription.index')}}" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Voir les ateliers</a>
+						</div>
+					{% else %}
 						<p>🔗 Rejoignez-nous dès maintenant !</p>
 						<div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
 							<a href="{{ path('security.registration')}}" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">M'inscrire</a>

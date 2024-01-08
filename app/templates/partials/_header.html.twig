@@ -1,3 +1,5 @@
+{% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+
 <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="#">Forum des métiers</a>
@@ -7,38 +9,35 @@
 		<div class="collapse navbar-collapse" id="navbarColor01">
 			<ul class="navbar-nav me-auto">
 				<li class="nav-item">
-					<a class="nav-link active" href="{{ path('home.index') }}">Accueil
-						<span class="visually-hidden">(current)</span>
-					</a>
+					<a class="nav-link {{ (currentPath == path('home.index')) ? 'active' : '' }}" href="{{ path('home.index') }}">Accueil</a>
 				</li>
-
+				<li class="nav-item">
+					{% if app.user %}
+						<a class="nav-link {{ (currentPath == path('forum-subscription.index')) ? 'active' : '' }}" href="{{ path('forum-subscription.index') }}">S'inscrire aux ateliers</a>
+					{% endif %}
+				</li>
 			</ul>
 			<ul class="navbar-nav">
-				<ul class="navbar-nav me-auto">
-					{% if app.user %}
-						<li class="nav-item dropdown" style="margin-right: 10rem">
-							<a class="nav-link dropdown-toggle show" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">{{ app.user.firstName }}</a>
-							<div class="dropdown-menu show" data-bs-popper="static">
-								<a class="dropdown-item" href="{{ path('user.edit', {'id': app.user.id}) }}">Mes information</a>
-								<a class="dropdown-item" href="{{ path('user.edit.password', {'id': app.user.id}) }}">Modifier mon mot de passe</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="{{ path('security.logout')}}">Se déconnecter</a>
-							</div>
-						</li>
-					{% else %}
-						<li class="nav-item">
-							<a class="nav-link active" href="{{ path('security.login')}}">Me connecter</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link active" href="{{ path('security.registration')}}">M'inscrire</a>
-						</li>
-
-					{% endif %}
-
-				</ul>
+				{% if app.user %}
+					<li class="nav-item dropdown" style="margin-right: 10rem">
+						<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{ app.user.firstName }}</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item {{ (currentPath == path('user.edit', {'id': app.user.id})) ? 'active' : '' }}" href="{{ path('user.edit', {'id': app.user.id}) }}">Mes information</a>
+							<a class="dropdown-item {{ (currentPath == path('user.edit.password', {'id': app.user.id})) ? 'active' : '' }}" href="{{ path('user.edit.password', {'id': app.user.id}) }}">Modifier mon mot de passe</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="{{ path('security.logout')}}">Se déconnecter</a>
+						</div>
+					</li>
+				{% else %}
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('security.login')}}">Me connecter</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('security.registration')}}">M'inscrire</a>
+					</li>
+				{% endif %}
 
 			</ul>
-
 		</div>
 	</div>
 </nav>

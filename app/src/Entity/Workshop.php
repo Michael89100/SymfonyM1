@@ -89,6 +89,19 @@ class Workshop
         return $this;
     }
 
+    /**
+     * Retourne la durée de l'atelier au format HH:MM
+     */
+    public function getDuration(): ?string
+    {
+        if ($this->startAt && $this->endAt) {
+            $interval = $this->startAt->diff($this->endAt);
+            return $interval->format('%H:%I');
+        }
+
+        return null;
+    }
+
     public function getName(): ?string
     {
         return $this->name;

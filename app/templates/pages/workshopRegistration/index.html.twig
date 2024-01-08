@@ -6,7 +6,8 @@
 
 {% block body %}
 	<div class="container mt-4">
-		<h1>Liste des ateliers de l'année</h1>
+		<h1>Liste des ateliers de l'année
+			{{year}}</h1>
 		<div class="count mt-4">
 			Il y a
 			{{ workshops|length }}
@@ -21,18 +22,35 @@
 			<thead>
 				<tr class="table-dark">
 					<th scope="col">Atelier</th>
-					<th scope="col">Date</th>
-					<th scope="col">actions</th>
+					<th scope="col">Description</th>
+					<th scope="col">Date & durée</th>
+					<th scope="col">Consulter</th>
 				</tr>
 			</thead>
 			<tbody>
 				{% for workshop in workshops %}
-					<tr class="table-primary">
-						<td>{{ workshop.name }}</td>
-						<td>{{ workshop.startAt | format_datetime(locale='fr') }}</td>
-						<td>
-							<a class="btn btn-success" href="{{ path('job.show', {'id': workshop.id}) }}">Voir</a>
-							<a class="btn btn-info" href="{{ path('job.edit', {'id': workshop.id}) }}">Editer</a>
+					{% set isFinished = (workshop.endAt < date('now')) %}
+					<tr class="{{ (isFinished) ? 'table-secondary' : 'table-primary' }}">
+						<td class="align-middle">{{ workshop.name }}
+							{% if isFinished %}
+								<br><span class="badge bg-danger">Terminé</span>
+							{% endif %}
+						</td>
+						<td>{{ workshop.description}}<br>
+							Métiers :
+							{% for job in workshop.jobs %}
+								<span class="badge bg-success">{{ job.name }}</span>
+							{% endfor %}
+							<br>
+							Secteur :
+							<span class="badge bg-info">{{ workshop.sector.name }}</span>
+						</td>
+						<td class="align-middle">{{ workshop.startAt | format_datetime(locale='fr') }}<br>
+							{{ workshop.duration }}
+							heures
+						</td>
+						<td class="align-middle">
+							<a class="btn btn-success" href="{{ path('job.show', {'id': workshop.id}) }}">Voir la fiche</a>
 						</td>
 					</tr>
 				{% else %}
@@ -42,6 +60,18 @@
 				{% endfor %}
 			</tbody>
 		</table>
+		<p>
+			<div>
+				Voir les années précédentes :
+				<ul class="pagination pagination-sm">
+					{% for y in years %}
+						<li class="page-item {{ (y == year) ? 'active' : '' }}">
+							<a class="page-link" href="{{ path('workshop-registration.index', {'year': y}) }}">{{ y }}</a>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</p>
 
 	</div>
 {% endblock %}

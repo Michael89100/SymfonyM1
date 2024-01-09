@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Workshop;
 use App\Repository\WorkshopRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,6 +33,16 @@ class WorkshopRegistrationController extends AbstractController
       'year' => $year,
       'years' => ['2023', '2024'],
       'opened' => $year == Date('Y') ? true : false
+    ]);
+  }
+
+  #[Route('/{id}', name: '.show', methods: ['GET'])]
+  public function show(Workshop $workshop): Response
+  {
+    return $this->render('pages/workshopRegistration/show.html.twig', [
+      'workshop' => $workshop,
+      'opened' => $workshop->getEdition()->getYear() == Date('Y') ? true : false,
+      'year' => $workshop->getEdition()->getYear()
     ]);
   }
 

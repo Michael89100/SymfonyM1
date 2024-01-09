@@ -6,6 +6,7 @@ use App\Repository\WorkshopRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: WorkshopRepository::class)]
 class Workshop
@@ -22,14 +23,25 @@ class Workshop
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 255)]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'jobs')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Room $room = null;
+    
+    #[ORM\ManyToOne(inversedBy: 'workshops')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Sector $sector = null;
+
+    #[ORM\ManyToOne(inversedBy: 'workshops')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Edition $edition = null;
 
     #[ORM\ManyToMany(targetEntity: Job::class, inversedBy: 'workshops')]
     private Collection $jobs;
@@ -37,16 +49,8 @@ class Workshop
     #[ORM\OneToMany(mappedBy: 'workshop', targetEntity: Resource::class, orphanRemoval: true)]
     private Collection $resource;
 
-    #[ORM\ManyToOne(inversedBy: 'workshops')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Sector $sector = null;
-
     #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'workshops')]
     private Collection $students;
-
-    #[ORM\ManyToOne(inversedBy: 'workshops')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Edition $edition = null;
 
     public function __construct()
     {
@@ -138,6 +142,30 @@ class Workshop
         return $this;
     }
 
+    public function getSector(): ?Sector
+    {
+        return $this->sector;
+    }
+
+    public function setSector(?Sector $sector): static
+    {
+        $this->sector = $sector;
+
+        return $this;
+    }
+
+    public function getEdition(): ?Edition
+    {
+        return $this->edition;
+    }
+
+    public function setEdition(?Edition $edition): static
+    {
+        $this->edition = $edition;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Job>
      */
@@ -165,7 +193,7 @@ class Workshop
     /**
      * @return Collection<int, Ressource>
      */
-    public function getResource(): Collection
+    public function getResources(): Collection
     {
         return $this->resource;
     }
@@ -192,18 +220,6 @@ class Workshop
         return $this;
     }
 
-    public function getSector(): ?Sector
-    {
-        return $this->sector;
-    }
-
-    public function setSector(?Sector $sector): static
-    {
-        $this->sector = $sector;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Student>
      */
@@ -224,18 +240,6 @@ class Workshop
     public function removeStudent(Student $student): static
     {
         $this->students->removeElement($student);
-
-        return $this;
-    }
-
-    public function getEdition(): ?Edition
-    {
-        return $this->edition;
-    }
-
-    public function setEdition(?Edition $edition): static
-    {
-        $this->edition = $edition;
 
         return $this;
     }

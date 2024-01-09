@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum des métiers - Atelier
+	{{ workshop.name }}
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-4">
+		<h1>Atelier
+			{{ workshop.name }}</h1>
+
+		<div class="row">
+			<div class="col-md-6">
+				<h2>Informations</h2>
+				<table class="table table-striped">
+					<tbody>
+						<tr>
+							<th scope="row">Nom</th>
+							<td>{{ workshop.name }}</td>
+						</tr>
+						<tr>
+							<th scope="row">Description</th>
+							<td>{{ workshop.description }}</td>
+						</tr>
+						<tr>
+							<th scope="row">Métiers</th>
+							<td>
+								{% for job in workshop.jobs %}
+									<span class="badge bg-success">{{ job.name }}</span>
+								{% endfor %}
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">Secteur</th>
+							<td>
+								<span class="badge bg-info">{{ workshop.sector.name }}</span>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">Nombre de places</th>
+							<td>{{ workshop.room.capacityMaximum }}</td>
+						</tr>
+						<tr>
+							<th scope="row">Places restantes</th>
+							<td></td>
+						</tr>
+						<tr>
+							<th scope="row">Date</th>
+							<td>{{ workshop.startAt|date('d/m/Y') }}</td>
+						</tr>
+						<tr>
+							<th scope="row">Heure</th>
+							<td>{{ workshop.startAt|date('H:i') }}</td>
+						</tr>
+						<tr>
+							<th scope="row">Durée</th>
+							<td>{{ workshop.duration }}</td>
+						</tr>
+						<tr>
+							<th scope="row">Lieu</th>
+							<td>{{ workshop.room.name }}</td>
+						</tr>
+						<tr>
+							<th scope="row">Intervenant</th>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-md-6">
+				<h2>Participants</h2>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th scope="col">Nom</th>
+							<th scope="col">Prénom</th>
+						</tr>
+					</thead>
+					<tbody>
+						{# <pre>
+						{{ dump(workshop.students) }}
+						</pre>
+						{% for student in workshop.students %}
+						<tr>
+						<td>{{ student.user.lastname }}</td>
+						<td>{{ student.user.firstname }}</td>
+						</tr>
+						{% else %}
+						<tr>
+						<td class="table-warning" colspan="3">Personne n'est inscrit sur cet atelier</td>
+						</tr>
+						{% endfor %} #}
+					</tbody>
+				</table>
+			</div>
+			<p>
+				<a href="{{ path('workshop-registration.index')}}" class="btn btn-success btn-lg px-4 me-md-2 fw-bold">Je m'inscrit à cet atelier !</a>
+			</p>
+		</div>
+	{% endblock %}

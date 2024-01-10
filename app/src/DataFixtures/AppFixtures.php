@@ -167,6 +167,7 @@ class AppFixtures extends Fixture
         ->setRegistrationAt(DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-1 year', '+1 year')))
         ->setSchool($this->faker->randomElement($schools))
         ->setSection($this->faker->randomElement($sections))
+        ->setEdition($this->faker->randomElement($editions))
         ->setUser($usersTemp[$randomIndex]);
       $students[] = $student;
       unset($usersTemp[$randomIndex]);
@@ -239,7 +240,7 @@ class AppFixtures extends Fixture
         ->setEndAt($startAt->modify('+1 hour'));
 
       if ($this->faker->boolean()) {
-        if (!isEmpty($quizzesTemp)){
+        if (!isEmpty($quizzesTemp)) {
           $randomIndex = array_rand($quizzesTemp);
           $workshop->setQuiz($quizzesTemp[$randomIndex]);
           unset($quizzesTemp[$randomIndex]);
@@ -247,7 +248,10 @@ class AppFixtures extends Fixture
       }
 
       $capacityMaximum = $workshop->getRoom()->getCapacityMaximum();
-      $studentsTemp = $students;
+      // On filtre les étudiants par édition
+      $studentsTemp = array_filter($students, function ($student) use ($edition) {
+        return $student->getEdition() === $edition;
+      });
       for ($w = 0; $w < mt_rand(1, $capacityMaximum); $w++) {
         if (empty($studentsTemp)) break;
         $randomIndex = array_rand($studentsTemp);

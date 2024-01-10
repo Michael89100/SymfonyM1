@@ -23,7 +23,7 @@ class Activity
     #[Assert\Length(min: 3, max: 255)]
     private ?string $name = null;
 
-    #[ORM\ManyToMany(targetEntity: Job::class, mappedBy: 'Activity')]
+    #[ORM\ManyToMany(targetEntity: Job::class, mappedBy: 'activities')]
     private Collection $jobs;
 
     public function __construct()

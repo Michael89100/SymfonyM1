@@ -30,13 +30,9 @@ class Edition
     #[ORM\OneToMany(mappedBy: 'edition', targetEntity: Workshop::class, orphanRemoval: true)]
     private Collection $workshops;
 
-    #[ORM\OneToMany(mappedBy: 'edition', targetEntity: Quiz::class)]
-    private Collection $quizzes;
-
     public function __construct()
     {
         $this->workshops = new ArrayCollection();
-        $this->quizzes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -121,34 +117,5 @@ class Edition
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, Quiz>
-     */
-    public function getQuizzes(): Collection
-    {
-        return $this->quizzes;
-    }
-
-    public function addQuiz(Quiz $quiz): static
-    {
-        if (!$this->quizzes->contains($quiz)) {
-            $this->quizzes->add($quiz);
-            $quiz->setEdition($this);
-        }
-
-        return $this;
-    }
-
-    public function removeQuiz(Quiz $quiz): static
-    {
-        if ($this->quizzes->removeElement($quiz)) {
-            // set the owning side to null (unless already changed)
-            if ($quiz->getEdition() === $this) {
-                $quiz->setEdition(null);
-            }
-        }
-
-        return $this;
-    }
+    
 }

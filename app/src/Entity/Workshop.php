@@ -31,6 +31,10 @@ class Workshop
     #[Assert\NotBlank]
     private ?string $description = null;
 
+    #[ORM\OneToOne(inversedBy: 'workshop', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Quiz $quiz = null;
+
     #[ORM\ManyToOne(inversedBy: 'workshops')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Room $room = null;
@@ -54,6 +58,7 @@ class Workshop
 
     #[ORM\ManyToMany(targetEntity: Speaker::class, inversedBy: 'workshops')]
     private Collection $speakers;
+
 
     public function __construct()
     {
@@ -130,6 +135,18 @@ class Workshop
     public function setDescription(string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+    
+    public function getQuiz(): ?Quiz
+    {
+        return $this->quiz;
+    }
+
+    public function setQuiz(Quiz $quiz): static
+    {
+        $this->quiz = $quiz;
 
         return $this;
     }

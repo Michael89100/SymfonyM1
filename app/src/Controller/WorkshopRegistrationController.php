@@ -43,17 +43,21 @@ class WorkshopRegistrationController extends AbstractController
    * @return Response
    */
   #[Route('/{id}', name: '.show', methods: ['GET'])]
-  public function show(Workshop $workshop): Response
+  public function show(Workshop $workshop, Request $request): Response
   {
     // Si l'atelier n'existe pas, on renvoie une erreur 404
     if (!$workshop) {
       throw $this->createNotFoundException('L\'atelier n\'existe pas');
     }
-    dump($workshop->getStudents()->toArray());
+    
+    // Récupérer l'URL de la page appelante
+    $urlReferer = $request->headers->get('referer');
+
     return $this->render('pages/workshopRegistration/show.html.twig', [
       'workshop' => $workshop,
       'opened' => $workshop->getEdition()->getYear() == Date('Y') ? true : false,
-      'year' => $workshop->getEdition()->getYear()
+      'year' => $workshop->getEdition()->getYear(),
+      'urlReferer' => $urlReferer,
     ]);
   }
 

@@ -20,20 +20,16 @@ class Speaker
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $resgistrationAt = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?User $user = null;
-
     #[ORM\ManyToMany(targetEntity: Workshop::class, mappedBy: 'speakers')]
     private Collection $workshops;
+
+    #[ORM\ManyToOne(inversedBy: 'speakers')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $User = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUserId(): ?int
-    {
-        return $this->user?->getId();
     }
 
     public function getSocialEmail(): ?string
@@ -56,18 +52,6 @@ class Speaker
     public function setResgistrationAt(?\DateTimeImmutable $resgistrationAt): static
     {
         $this->resgistrationAt = $resgistrationAt;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
 
         return $this;
     }
@@ -95,6 +79,24 @@ class Speaker
         if ($this->workshops->removeElement($workshop)) {
             $workshop->removeSpeaker($this);
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->User;
+    }
+
+    
+    public function getUserId(): ?int
+    {
+        return $this->User->getId();
+    }
+
+    public function setUser(?User $User): static
+    {
+        $this->User = $User;
 
         return $this;
     }

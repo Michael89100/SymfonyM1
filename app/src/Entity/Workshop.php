@@ -31,7 +31,7 @@ class Workshop
     #[Assert\NotBlank]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(inversedBy: 'jobs')]
+    #[ORM\ManyToOne(inversedBy: 'workshops')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Room $room = null;
     
@@ -42,12 +42,12 @@ class Workshop
     #[ORM\ManyToOne(inversedBy: 'workshops')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Edition $edition = null;
-
-    #[ORM\ManyToMany(targetEntity: Job::class, inversedBy: 'workshops')]
-    private Collection $jobs;
-
+    
     #[ORM\OneToMany(mappedBy: 'workshop', targetEntity: Resource::class, orphanRemoval: true)]
     private Collection $resource;
+    
+    #[ORM\ManyToMany(targetEntity: Job::class, inversedBy: 'workshops')]
+    private Collection $jobs;
 
     #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'workshops')]
     private Collection $students;
@@ -167,30 +167,6 @@ class Workshop
     }
 
     /**
-     * @return Collection<int, Job>
-     */
-    public function getJobs(): Collection
-    {
-        return $this->jobs;
-    }
-
-    public function addJob(Job $job): static
-    {
-        if (!$this->jobs->contains($job)) {
-            $this->jobs->add($job);
-        }
-
-        return $this;
-    }
-
-    public function removeJob(Job $job): static
-    {
-        $this->jobs->removeElement($job);
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Ressource>
      */
     public function getResources(): Collection
@@ -216,6 +192,30 @@ class Workshop
                 $resource->setWorkshop(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Job>
+     */
+    public function getJobs(): Collection
+    {
+        return $this->jobs;
+    }
+
+    public function addJob(Job $job): static
+    {
+        if (!$this->jobs->contains($job)) {
+            $this->jobs->add($job);
+        }
+
+        return $this;
+    }
+
+    public function removeJob(Job $job): static
+    {
+        $this->jobs->removeElement($job);
 
         return $this;
     }

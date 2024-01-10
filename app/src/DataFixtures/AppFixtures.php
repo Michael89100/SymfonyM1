@@ -253,9 +253,9 @@ class AppFixtures extends Fixture
     for ($i = 0; $i < 20; $i++) {
       $resource = new Resource();
       $resource
-        ->setName($this->faker->sentence(1))
+        ->setName($this->faker->words(5, true) . '.pdf')
         ->setDescription($this->faker->sentence(mt_rand(5, 10)))
-        ->setUrl($this->faker->url())
+        ->setUrl($this->faker->url() . '/' . $resource->getName())
         ->setWorkshop($this->faker->randomElement($workshops));
       $resources[] = $resource;
       $manager->persist($resource);

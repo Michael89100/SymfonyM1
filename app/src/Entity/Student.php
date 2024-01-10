@@ -34,10 +34,6 @@ class Student
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
-    #[ORM\ManyToOne(inversedBy: 'students')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Edition $edition = null;
-
     public function __construct()
     {
         $this->workshops = new ArrayCollection();
@@ -140,15 +136,4 @@ class Student
         return $this;
     }
 
-    public function getEdition(): ?Edition
-    {
-        return $this->edition;
-    }
-
-    public function setEdition(?Edition $edition): static
-    {
-        $this->edition = $edition;
-
-        return $this;
-    }
 }

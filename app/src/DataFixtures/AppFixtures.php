@@ -27,6 +27,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use DateTimeImmutable;
 use Symfony\Component\Validator\Constraints\Date;
 
+use function PHPUnit\Framework\isEmpty;
 
 class AppFixtures extends Fixture
 {
@@ -166,8 +167,7 @@ class AppFixtures extends Fixture
         ->setRegistrationAt(DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-1 year', '+1 year')))
         ->setSchool($this->faker->randomElement($schools))
         ->setSection($this->faker->randomElement($sections))
-        ->setUser($usersTemp[$randomIndex])
-        ->setEdition($this->faker->randomElement($editions));
+        ->setUser($usersTemp[$randomIndex]);
       $students[] = $student;
       unset($usersTemp[$randomIndex]);
       $manager->persist($student);
@@ -181,8 +181,7 @@ class AppFixtures extends Fixture
       $speaker
         ->setSocialEmail($this->faker->email())
         ->setResgistrationAt(DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-1 year', '+1 year')))
-        ->setUser($usersTemp[$randomIndex])
-        ->setEdition($this->faker->randomElement($editions));
+        ->setUser($usersTemp[$randomIndex]);
       $speakers[] = $speaker;
       unset($usersTemp[$randomIndex]);
       $manager->persist($speaker);
@@ -193,11 +192,11 @@ class AppFixtures extends Fixture
     for ($i = 0; $i < 5; $i++) {
       $quiz = new Quiz();
       $quiz
-        ->setName($this->faker->words(2, true))
-        ->setEdition($this->faker->randomElement($editions));
+        ->setName($this->faker->words(2, true));
       $quizzes[] = $quiz;
       $manager->persist($quiz);
     }
+    $quizzesTemp = $quizzes;
 
     // Question
     $questions = [];
@@ -238,12 +237,36 @@ class AppFixtures extends Fixture
         ->setEdition($edition)
         ->setStartAt($startAt)
         ->setEndAt($startAt->modify('+1 hour'));
-      for ($w = 0; $w < mt_rand(1, 5); $w++) {
-        $workshop->addStudent($this->faker->randomElement($students));
+
+      if ($this->faker->boolean()) {
+        if (!isEmpty($quizzesTemp)){
+          $randomIndex = array_rand($quizzesTemp);
+          $workshop->setQuiz($quizzesTemp[$randomIndex]);
+          unset($quizzesTemp[$randomIndex]);
+        }
       }
+
+      $capacityMaximum = $workshop->getRoom()->getCapacityMaximum();
+      $studentsTemp = $students;
+      for ($w = 0; $w < mt_rand(1, $capacityMaximum); $w++) {
+        if (empty($studentsTemp)) break;
+        $randomIndex = array_rand($studentsTemp);
+        $workshop->addStudent($studentsTemp[$randomIndex]);
+        unset($studentsTemp[$randomIndex]);
+      }
+
+      $speakersTemp = $speakers;
+      for ($w = 0; $w < mt_rand(1, 5); $w++) {
+        if (empty($speakersTemp)) break;
+        $randomIndex = array_rand($speakersTemp);
+        $workshop->addSpeaker($speakersTemp[$randomIndex]);
+        unset($speakersTemp[$randomIndex]);
+      }
+
       for ($j = 0; $j < mt_rand(1, 5); $j++) {
         $workshop->addJob($this->faker->randomElement($jobs));
       }
+
       $workshops[] = $workshop;
       $manager->persist($workshop);
     }

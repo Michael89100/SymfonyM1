@@ -31,6 +31,10 @@ class Workshop
     #[Assert\NotBlank]
     private ?string $description = null;
 
+    #[ORM\OneToOne(inversedBy: 'workshop', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Quiz $quiz = null;
+
     #[ORM\ManyToOne(inversedBy: 'workshops')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Room $room = null;
@@ -52,11 +56,16 @@ class Workshop
     #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'workshops')]
     private Collection $students;
 
+    #[ORM\ManyToMany(targetEntity: Speaker::class, inversedBy: 'workshops')]
+    private Collection $speakers;
+
+
     public function __construct()
     {
         $this->jobs = new ArrayCollection();
         $this->resource = new ArrayCollection();
         $this->students = new ArrayCollection();
+        $this->speakers = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -126,6 +135,18 @@ class Workshop
     public function setDescription(string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+    
+    public function getQuiz(): ?Quiz
+    {
+        return $this->quiz;
+    }
+
+    public function setQuiz(Quiz $quiz): static
+    {
+        $this->quiz = $quiz;
 
         return $this;
     }
@@ -243,4 +264,29 @@ class Workshop
 
         return $this;
     }
+
+        /**
+     * @return Collection<int, Speaker>
+     */
+    public function getSpeakers(): Collection
+    {
+        return $this->speakers;
+    }
+
+    public function addSpeaker(Speaker $speaker): static
+    {
+        if (!$this->speakers->contains($speaker)) {
+            $this->speakers->add($speaker);
+        }
+
+        return $this;
+    }
+
+    public function removeSpeaker(Speaker $speaker): static
+    {
+        $this->speakers->removeElement($speaker);
+
+        return $this;
+    }
+
 }

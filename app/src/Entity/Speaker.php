@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SpeakerRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SpeakerRepository::class)]
@@ -19,21 +20,16 @@ class Speaker
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $resgistrationAt = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?User $user = null;
+    #[ORM\ManyToMany(targetEntity: Workshop::class, mappedBy: 'speakers')]
+    private Collection $workshops;
 
     #[ORM\ManyToOne(inversedBy: 'speakers')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Edition $edition = null;
+    private ?User $User = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUserId(): ?int
-    {
-        return $this->user?->getId();
     }
 
     public function getSocialEmail(): ?string
@@ -60,27 +56,49 @@ class Speaker
         return $this;
     }
 
+    /**
+     * @return Collection<int, Workshop>
+     */
+    public function getWorkshops(): Collection
+    {
+        return $this->workshops;
+    }
+
+    public function addWorkshop(Workshop $workshop): static
+    {
+        if (!$this->workshops->contains($workshop)) {
+            $this->workshops->add($workshop);
+            $workshop->addSpeaker($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWorkshop(Workshop $workshop): static
+    {
+        if ($this->workshops->removeElement($workshop)) {
+            $workshop->removeSpeaker($this);
+        }
+
+        return $this;
+    }
+
     public function getUser(): ?User
     {
-        return $this->user;
+        return $this->User;
     }
 
-    public function setUser(?User $user): static
+    
+    public function getUserId(): ?int
     {
-        $this->user = $user;
+        return $this->User->getId();
+    }
+
+    public function setUser(?User $User): static
+    {
+        $this->User = $User;
 
         return $this;
     }
 
-    public function getEdition(): ?Edition
-    {
-        return $this->edition;
-    }
-
-    public function setEdition(?Edition $edition): static
-    {
-        $this->edition = $edition;
-
-        return $this;
-    }
 }

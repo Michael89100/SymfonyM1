@@ -18,12 +18,11 @@ class Quiz
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\ManyToOne(inversedBy: 'quizzes')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Edition $edition = null;
-
     #[ORM\OneToMany(mappedBy: 'quiz', targetEntity: Question::class, orphanRemoval: true)]
     private Collection $questions;
+
+    #[ORM\OneToOne(mappedBy: 'quiz', cascade: ['persist', 'remove'])]
+    private ?Workshop $workshop = null;
 
     public function __construct()
     {
@@ -43,18 +42,6 @@ class Quiz
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getEdition(): ?Edition
-    {
-        return $this->edition;
-    }
-
-    public function setEdition(?Edition $edition): static
-    {
-        $this->edition = $edition;
 
         return $this;
     }
@@ -85,6 +72,23 @@ class Quiz
                 $question->setQuiz(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getWorkshop(): ?Workshop
+    {
+        return $this->workshop;
+    }
+
+    public function setWorkshop(Workshop $workshop): static
+    {
+        // set the owning side of the relation if necessary
+        if ($workshop->getQuiz() !== $this) {
+            $workshop->setQuiz($this);
+        }
+
+        $this->workshop = $workshop;
 
         return $this;
     }

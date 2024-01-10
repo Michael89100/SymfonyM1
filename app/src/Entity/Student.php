@@ -31,12 +31,9 @@ class Student
     #[ORM\ManyToOne(inversedBy: 'students')]
     private ?Section $section = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?User $user = null;
-
     #[ORM\ManyToOne(inversedBy: 'students')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Edition $edition = null;
+    private ?User $User = null;
 
     public function __construct()
     {
@@ -46,11 +43,6 @@ class Student
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUserId(): ?int
-    {
-        return $this->user?->getId();
     }
 
     public function getSchoolEmail(): ?string
@@ -130,25 +122,19 @@ class Student
 
     public function getUser(): ?User
     {
-        return $this->user;
+        return $this->User;
+    }
+
+    public function getUserId(): ?int
+    {
+        return $this->User->getId();
     }
 
     public function setUser(?User $User): static
     {
-        $this->user = $User;
+        $this->User = $User;
 
         return $this;
     }
 
-    public function getEdition(): ?Edition
-    {
-        return $this->edition;
-    }
-
-    public function setEdition(?Edition $edition): static
-    {
-        $this->edition = $edition;
-
-        return $this;
-    }
 }

@@ -6,6 +6,7 @@ use App\Repository\WorkshopRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: WorkshopRepository::class)]
 class Workshop
@@ -22,31 +23,34 @@ class Workshop
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 255)]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(inversedBy: 'jobs')]
+    #[ORM\ManyToOne(inversedBy: 'workshops')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Room $room = null;
-
-    #[ORM\ManyToMany(targetEntity: Job::class, inversedBy: 'workshops')]
-    private Collection $jobs;
-
-    #[ORM\OneToMany(mappedBy: 'workshop', targetEntity: Resource::class, orphanRemoval: true)]
-    private Collection $resource;
-
+    
     #[ORM\ManyToOne(inversedBy: 'workshops')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Sector $sector = null;
 
-    #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'workshops')]
-    private Collection $students;
-
     #[ORM\ManyToOne(inversedBy: 'workshops')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Edition $edition = null;
+    
+    #[ORM\OneToMany(mappedBy: 'workshop', targetEntity: Resource::class, orphanRemoval: true)]
+    private Collection $resource;
+    
+    #[ORM\ManyToMany(targetEntity: Job::class, inversedBy: 'workshops')]
+    private Collection $jobs;
+
+    #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'workshops')]
+    private Collection $students;
 
     public function __construct()
     {
@@ -89,6 +93,19 @@ class Workshop
         return $this;
     }
 
+    /**
+     * Retourne la durée de l'atelier au format HH:MM
+     */
+    public function getDuration(): ?string
+    {
+        if ($this->startAt && $this->endAt) {
+            $interval = $this->startAt->diff($this->endAt);
+            return $interval->format('%H:%I');
+        }
+
+        return null;
+    }
+
     public function getName(): ?string
     {
         return $this->name;
@@ -125,26 +142,26 @@ class Workshop
         return $this;
     }
 
-    /**
-     * @return Collection<int, Job>
-     */
-    public function getJobs(): Collection
+    public function getSector(): ?Sector
     {
-        return $this->jobs;
+        return $this->sector;
     }
 
-    public function addJob(Job $job): static
+    public function setSector(?Sector $sector): static
     {
-        if (!$this->jobs->contains($job)) {
-            $this->jobs->add($job);
-        }
+        $this->sector = $sector;
 
         return $this;
     }
 
-    public function removeJob(Job $job): static
+    public function getEdition(): ?Edition
     {
-        $this->jobs->removeElement($job);
+        return $this->edition;
+    }
+
+    public function setEdition(?Edition $edition): static
+    {
+        $this->edition = $edition;
 
         return $this;
     }
@@ -152,7 +169,7 @@ class Workshop
     /**
      * @return Collection<int, Ressource>
      */
-    public function getResource(): Collection
+    public function getResources(): Collection
     {
         return $this->resource;
     }
@@ -179,14 +196,26 @@ class Workshop
         return $this;
     }
 
-    public function getSector(): ?Sector
+    /**
+     * @return Collection<int, Job>
+     */
+    public function getJobs(): Collection
     {
-        return $this->sector;
+        return $this->jobs;
     }
 
-    public function setSector(?Sector $sector): static
+    public function addJob(Job $job): static
     {
-        $this->sector = $sector;
+        if (!$this->jobs->contains($job)) {
+            $this->jobs->add($job);
+        }
+
+        return $this;
+    }
+
+    public function removeJob(Job $job): static
+    {
+        $this->jobs->removeElement($job);
 
         return $this;
     }
@@ -211,18 +240,6 @@ class Workshop
     public function removeStudent(Student $student): static
     {
         $this->students->removeElement($student);
-
-        return $this;
-    }
-
-    public function getEdition(): ?Edition
-    {
-        return $this->edition;
-    }
-
-    public function setEdition(?Edition $edition): static
-    {
-        $this->edition = $edition;
 
         return $this;
     }

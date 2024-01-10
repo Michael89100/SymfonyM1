@@ -229,13 +229,13 @@ class AppFixtures extends Fixture
       $workshop = new Workshop();
       $edition = $this->faker->randomElement($editions);
       $randomHours = rand(1, 6);
-      $startAt = $edition->getStartAt()->modify("+$randomHours hour");
+      $startAt = $edition->getStartAt()->modify($randomHours . " hour");
       $workshop
         ->setName($this->faker->words(3, true))
         ->setDescription($this->faker->words(10, true))
         ->setRoom($this->faker->randomElement($rooms))
         ->setSector($this->faker->randomElement($sectors))
-        ->setEdition($this->faker->randomElement($editions))
+        ->setEdition($edition)
         ->setStartAt($startAt)
         ->setEndAt($startAt->modify('+1 hour'));
       for ($w = 0; $w < mt_rand(1, 5); $w++) {
@@ -253,9 +253,9 @@ class AppFixtures extends Fixture
     for ($i = 0; $i < 20; $i++) {
       $resource = new Resource();
       $resource
-        ->setName($this->faker->sentence(1))
+        ->setName($this->faker->words(5, true) . '.pdf')
         ->setDescription($this->faker->sentence(mt_rand(5, 10)))
-        ->setUrl($this->faker->url())
+        ->setUrl($this->faker->url() . '/' . $resource->getName())
         ->setWorkshop($this->faker->randomElement($workshops));
       $resources[] = $resource;
       $manager->persist($resource);

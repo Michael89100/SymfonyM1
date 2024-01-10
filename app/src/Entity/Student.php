@@ -31,7 +31,7 @@ class Student
     #[ORM\ManyToOne(inversedBy: 'students')]
     private ?Section $section = null;
 
-    #[ORM\OneToOne(inversedBy: 'student', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'students')]

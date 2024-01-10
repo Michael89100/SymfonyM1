@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SpeakerRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SpeakerRepository::class)]
@@ -22,9 +23,8 @@ class Speaker
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
-    #[ORM\ManyToOne(inversedBy: 'speakers')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Edition $edition = null;
+    #[ORM\ManyToMany(targetEntity: Workshop::class, mappedBy: 'speakers')]
+    private Collection $workshops;
 
     public function getId(): ?int
     {
@@ -72,15 +72,31 @@ class Speaker
         return $this;
     }
 
-    public function getEdition(): ?Edition
+    /**
+     * @return Collection<int, Workshop>
+     */
+    public function getWorkshops(): Collection
     {
-        return $this->edition;
+        return $this->workshops;
     }
 
-    public function setEdition(?Edition $edition): static
+    public function addWorkshop(Workshop $workshop): static
     {
-        $this->edition = $edition;
+        if (!$this->workshops->contains($workshop)) {
+            $this->workshops->add($workshop);
+            $workshop->addSpeaker($this);
+        }
 
         return $this;
     }
+
+    public function removeWorkshop(Workshop $workshop): static
+    {
+        if ($this->workshops->removeElement($workshop)) {
+            $workshop->removeSpeaker($this);
+        }
+
+        return $this;
+    }
+
 }

@@ -52,11 +52,15 @@ class Workshop
     #[ORM\ManyToMany(targetEntity: Student::class, inversedBy: 'workshops')]
     private Collection $students;
 
+    #[ORM\ManyToMany(targetEntity: Speaker::class, inversedBy: 'workshops')]
+    private Collection $speakers;
+
     public function __construct()
     {
         $this->jobs = new ArrayCollection();
         $this->resource = new ArrayCollection();
         $this->students = new ArrayCollection();
+        $this->speakers = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -243,4 +247,29 @@ class Workshop
 
         return $this;
     }
+
+        /**
+     * @return Collection<int, Speaker>
+     */
+    public function getSpeakers(): Collection
+    {
+        return $this->speakers;
+    }
+
+    public function addSpeaker(Speaker $speaker): static
+    {
+        if (!$this->speakers->contains($speaker)) {
+            $this->speakers->add($speaker);
+        }
+
+        return $this;
+    }
+
+    public function removeSpeaker(Speaker $speaker): static
+    {
+        $this->speakers->removeElement($speaker);
+
+        return $this;
+    }
+
 }

@@ -30,20 +30,12 @@ class Edition
     #[ORM\OneToMany(mappedBy: 'edition', targetEntity: Workshop::class, orphanRemoval: true)]
     private Collection $workshops;
 
-    #[ORM\OneToMany(mappedBy: 'edition', targetEntity: Student::class)]
-    private Collection $students;
-
-    #[ORM\OneToMany(mappedBy: 'edition', targetEntity: Speaker::class)]
-    private Collection $speakers;
-
     #[ORM\OneToMany(mappedBy: 'edition', targetEntity: Quiz::class)]
     private Collection $quizzes;
 
     public function __construct()
     {
         $this->workshops = new ArrayCollection();
-        $this->students = new ArrayCollection();
-        $this->speakers = new ArrayCollection();
         $this->quizzes = new ArrayCollection();
     }
 
@@ -124,66 +116,6 @@ class Edition
             // set the owning side to null (unless already changed)
             if ($workshop->getEdition() === $this) {
                 $workshop->setEdition(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Student>
-     */
-    public function getStudents(): Collection
-    {
-        return $this->students;
-    }
-
-    public function addStudent(Student $student): static
-    {
-        if (!$this->students->contains($student)) {
-            $this->students->add($student);
-            $student->setEdition($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStudent(Student $student): static
-    {
-        if ($this->students->removeElement($student)) {
-            // set the owning side to null (unless already changed)
-            if ($student->getEdition() === $this) {
-                $student->setEdition(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Speaker>
-     */
-    public function getSpeakers(): Collection
-    {
-        return $this->speakers;
-    }
-
-    public function addSpeaker(Speaker $speaker): static
-    {
-        if (!$this->speakers->contains($speaker)) {
-            $this->speakers->add($speaker);
-            $speaker->setEdition($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSpeaker(Speaker $speaker): static
-    {
-        if ($this->speakers->removeElement($speaker)) {
-            // set the owning side to null (unless already changed)
-            if ($speaker->getEdition() === $this) {
-                $speaker->setEdition(null);
             }
         }
 

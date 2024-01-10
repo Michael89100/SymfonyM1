@@ -32,7 +32,7 @@ class Workshop
     private ?string $description = null;
 
     #[ORM\OneToOne(inversedBy: 'workshop', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Quiz $quiz = null;
 
     #[ORM\ManyToOne(inversedBy: 'workshops')]

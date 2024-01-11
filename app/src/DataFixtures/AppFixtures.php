@@ -23,9 +23,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use DateTimeImmutable;
-use Symfony\Component\Validator\Constraints\Date;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -43,6 +41,11 @@ class AppFixtures extends Fixture
 
   public function load(ObjectManager $manager): void
   {
+
+    // Chargement du fichier workshops.json
+    $workshopsJson = file_get_contents(__DIR__ . '/workshops.json');
+    $workshopsArray = json_decode($workshopsJson, true);
+
     // Users
     $users = [];
     for ($i = 0; $i < 50; $i++) {
@@ -157,20 +160,26 @@ class AppFixtures extends Fixture
       $manager->persist($section);
     }
 
-    // Students
     $students = [];
-    for ($i = 0; $i < 40; $i++) {
-      $randomIndex = array_rand($usersTemp);
-      $student = new Student();
-      $student
-        ->setSchoolEmail($this->faker->email())
-        ->setRegistrationAt(DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-1 year', '+1 year')))
-        ->setSchool($this->faker->randomElement($schools))
-        ->setSection($this->faker->randomElement($sections))
-        ->setUser($usersTemp[$randomIndex]);
-      $students[] = $student;
-      unset($usersTemp[$randomIndex]);
-      $manager->persist($student);
+    for ($j = 0; $j < count($editions); $j++) {
+      $usersTemp = $users;
+      // récupération de la date de début et de fin de l'édition au format DateTime
+      $dateStart = $editions[$j]->getStartAt()->modify('-6 month')->format('Y-m-d H:i:s');
+      $dateEnd = $editions[$j]->getEndAt()->format('Y-m-d H:i:s');
+      for ($i = 0; $i < mt_rand(20, 40); $i++) {
+        $randomIndex = array_rand($usersTemp);
+        $student = new Student();
+        $student
+          ->setSchoolEmail($this->faker->email())
+          ->setRegistrationAt(DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween($dateStart, $dateEnd)))
+          ->setSchool($this->faker->randomElement($schools))
+          ->setSection($this->faker->randomElement($sections))
+          ->setEdition($editions[$j])
+          ->setUser($usersTemp[$randomIndex]);
+        $manager->persist($student);
+        $students[] = $student;
+        unset($usersTemp[$randomIndex]);
+      }
     }
 
     // Speakers
@@ -230,8 +239,8 @@ class AppFixtures extends Fixture
       $randomHours = rand(1, 6);
       $startAt = $edition->getStartAt()->modify($randomHours . " hour");
       $workshop
-        ->setName($this->faker->words(3, true))
-        ->setDescription($this->faker->words(10, true))
+        ->setName($this->faker->randomElement($workshopsArray)['name'])
+        ->setDescription($this->faker->randomElement($workshopsArray)['description'])
         ->setRoom($this->faker->randomElement($rooms))
         ->setSector($this->faker->randomElement($sectors))
         ->setEdition($edition)
@@ -239,7 +248,7 @@ class AppFixtures extends Fixture
         ->setEndAt($startAt->modify('+1 hour'));
 
       if ($this->faker->boolean()) {
-        if (!isEmpty($quizzesTemp)){
+        if (!isEmpty($quizzesTemp)) {
           $randomIndex = array_rand($quizzesTemp);
           $workshop->setQuiz($quizzesTemp[$randomIndex]);
           unset($quizzesTemp[$randomIndex]);
@@ -247,7 +256,10 @@ class AppFixtures extends Fixture
       }
 
       $capacityMaximum = $workshop->getRoom()->getCapacityMaximum();
-      $studentsTemp = $students;
+      // On filtre les étudiants par édition
+      $studentsTemp = array_filter($students, function ($student) use ($edition) {
+        return $student->getEdition() === $edition;
+      });
       for ($w = 0; $w < mt_rand(1, $capacityMaximum); $w++) {
         if (empty($studentsTemp)) break;
         $randomIndex = array_rand($studentsTemp);

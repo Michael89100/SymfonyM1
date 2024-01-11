@@ -10,13 +10,25 @@
 	<div class="container mt-4">
 		<div class="row">
 			<div class="col">
+				<a href="{{ path('home.index') }}">Accueil</a>
+				>
+				<a href="{{ urlReferer }}">Liste des ateliers</a>
+				>
+				{{ workshop.name }}</div>
+		</div>
+		<div class="row justify-content-between align-items-center mt-4">
+			<div class="col-auto">
 				<h1>Atelier ”{{ workshop.name }}”</h1>
 			</div>
-			<div class="col">
-				{% if remainingSeats <= 0 %}
-					<a href="#" class="btn btn-danger btn-lg px-4 me-md-2 fw-bold">Complet 😭</a>
+			<div class="col-auto">
+				{% if isUserEnrolled %}
+					<a href="{{ path('workshop-registration.unregister', {'id': workshop.id})}}" class="btn btn-danger btn-lg px-4 me-md-2 fw-bold">Je me désinscrit de cet atelier</a>
 				{% else %}
-					<a href="{{ path('workshop-registration.index')}}" class="btn btn-success btn-lg px-4 me-md-2 fw-bold">Je m'inscrit à cet atelier !</a>
+					{% if remainingSeats <= 0 %}
+						<a href="#" class="btn btn-danger btn-lg px-4 me-md-2 fw-bold">Complet 😭</a>
+					{% else %}
+						<a href="{{ path('workshop-registration.register', {'id': workshop.id})}}" class="btn btn-success btn-lg px-4 me-md-2 fw-bold">Je m'inscrit à cet atelier !</a>
+					{% endif %}
 				{% endif %}
 			</div>
 		</div>
@@ -79,8 +91,16 @@
 							<td>{{ workshop.room.name }}</td>
 						</tr>
 						<tr>
-							<th scope="row">Intervenant</th>
-							<td></td>
+							<th scope="row">Intervenant{{ (workshop.speakers|length > 1) ? 's' }}</th>
+							<td>
+								{% for speaker in workshop.speakers %}
+									{{ speaker.user.firstname }}
+									{{ speaker.user.lastname }}
+									<br>
+								{% else %}
+									<span class="badge bg-warning">Pas encore d'intervenant de désigné</span>
+								{% endfor %}
+							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -89,28 +109,30 @@
 				<h2>Participants ({{ workshop.students|length }}
 					/
 					{{ workshop.room.capacityMaximum }})</h2>
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th scope="col">Nom</th>
-							<th scope="col">Prénom</th>
-							<th scope="col">Ecole</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for student in workshop.students %}
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
 							<tr>
-								<td>{{ student.user.lastname }}</td>
-								<td>{{ student.user.firstname }}</td>
-								<td>{{ student.school.name }}</td>
+								<th scope="col">Nom</th>
+								<th scope="col">Prénom</th>
+								<th scope="col">Ecole</th>
 							</tr>
-						{% else %}
-							<tr>
-								<td class="table-warning" colspan="3">Personne n'est inscrit sur cet atelier</td>
-							</tr>
-						{% endfor %}
-					</tbody>
-				</table>
+						</thead>
+						<tbody>
+							{% for student in workshop.students %}
+								<tr>
+									<td>{{ student.user.lastname }}</td>
+									<td>{{ student.user.firstname }}</td>
+									<td>{{ student.school.name }}</td>
+								</tr>
+							{% else %}
+								<tr>
+									<td class="table-warning" colspan="3">Personne n'est inscrit sur cet atelier</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 		<div class="row mt-4">
@@ -147,4 +169,10 @@
 				</tbody>
 			</table>
 		</div>
-	{% endblock %}
+		<div class="row mt-4">
+			<div class="col">
+				<a href="{{ urlReferer }}" class="btn btn-secondary">Retour aux ateliers</a>
+			</div>
+		</div>
+	</div>
+{% endblock %}

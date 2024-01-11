@@ -35,8 +35,13 @@ class Student
     #[ORM\JoinColumn(nullable: false)]
     private ?User $User = null;
 
+    #[ORM\ManyToOne(inversedBy: 'students')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Edition $edition = null;
+
     public function __construct()
     {
+        $this->registrationAt = new \DateTimeImmutable();
         $this->workshops = new ArrayCollection();
     }
 
@@ -137,4 +142,15 @@ class Student
         return $this;
     }
 
+    public function getEdition(): ?Edition
+    {
+        return $this->edition;
+    }
+
+    public function setEdition(?Edition $edition): static
+    {
+        $this->edition = $edition;
+
+        return $this;
+    }
 }

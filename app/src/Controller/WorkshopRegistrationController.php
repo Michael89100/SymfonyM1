@@ -205,7 +205,7 @@ class WorkshopRegistrationController extends AbstractController
    * @param User|null $user l'utilisateur connecté
    * @return bool true si l'utilisateur est inscrit à l'atelier, false sinon
    */
-  private function isUserEnrolled(Workshop $workshop, User $user): bool
+  private function isUserEnrolled(Workshop $workshop, User $user = null): bool
   {
     $userId = $user ? $user->getId() : null;
     // Si l'utilisateur est déjà inscrit à l'atelier
@@ -228,7 +228,7 @@ class WorkshopRegistrationController extends AbstractController
    * @param User|null $user l'utilisateur connecté
    * @return Student|null l'inscription de l'utilisateur à l'atelier
    */
-  private function getStudent(Edition $edition, User $user): ?Student
+  private function getStudent(Edition $edition, User $user = null): ?Student
   {
     $userId = $user ? $user->getId() : null;
 
@@ -271,7 +271,7 @@ class WorkshopRegistrationController extends AbstractController
    * @param User|null $user
    * @return int
    */
-  private function countWorkshopStudent(Edition $edition, User $user): int
+  private function countWorkshopStudent(Edition $edition, User $user = null): int
   {
     $userId = $user ? $user->getId() : null;
     $count = 0;

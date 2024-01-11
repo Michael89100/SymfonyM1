@@ -56,14 +56,13 @@ class WorkshopRegistrationController extends AbstractController
 
     // Récupérer l'URL de la page appelante
     $urlReferer = $request->headers->get('referer');
-
     return $this->render('pages/workshopRegistration/show.html.twig', [
       'workshop' => $workshop,
       'opened' => $this->isWorkshopOpen($workshop),
       'full' => $this->isWorkshopFull($workshop),
       'year' => $workshop->getEdition()->getYear(),
       'urlReferer' => $urlReferer,
-      'isUserEnrolled' => $this->isUserEnrolled($workshop, $this->getUser()),
+      'isUserEnrolled' => $this->getUser() ? $this->isUserEnrolled($workshop, $this->getUser()) : false,
     ]);
   }
 

@@ -43,16 +43,14 @@
 						</p>
 					</p>
 
-
-					{% if app.user %}
-						<p>Inscrivez-vous sur l'un de nos ateliers !</p>
-						<div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
-							<a href="{{ path('workshop-registration.index')}}" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Voir les ateliers</a>
-						</div>
-					{% else %}
+					<p>📅 Inscrivez-vous sur l'un de nos ateliers !</p>
+					<div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+						<a href="{{ path('workshop-registration.index')}}" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Voir les ateliers</a>
+					</div>
+					{% if not app.user %}
 						<p>🔗 Rejoignez-nous dès maintenant !</p>
 						<div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
-							<a href="{{ path('security.registration')}}" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">M'inscrire</a>
+							<a href="{{ path('security.registration')}}" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Créer mon compte</a>
 							<a href="{{ path('security.login')}}" class="btn btn-outline-secondary btn-lg px-4">Me connecter</a>
 						</div>
 					{% endif %}

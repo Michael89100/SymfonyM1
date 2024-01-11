@@ -1,0 +1,42 @@
+[
+    {
+        "name": "Éducation et Formation",
+        "description": "Dédié à l'enseignement et au développement des compétences académiques et professionnelles."
+    },
+    {
+        "name": "Industrie et Manufacture",
+        "description": "Le pilier de la production industrielle et de la fabrication de biens."
+    },
+    {
+        "name": "Énergie et Environnement",
+        "description": "Concentré sur les sources d'énergie renouvelables et la protection de l'environnement."
+    },
+    {
+        "name": "Technologie et Innovation",
+        "description": "Un secteur dynamique centré sur les avancées technologiques et l'innovation."
+    },
+    {
+        "name": "Arts et Culture",
+        "description": "Un domaine créatif valorisant l'expression artistique et la préservation culturelle."
+    },
+    {
+        "name": "Technologie et Innovation",
+        "description": "Un secteur dynamique centré sur les avancées technologiques et l'innovation."
+    },
+    {
+        "name": "Finance et Banque",
+        "description": "Le cœur de l'économie, gérant les finances et les investissements."
+    },
+    {
+        "name": "Éducation et Formation",
+        "description": "Dédié à l'enseignement et au développement des compétences académiques et professionnelles."
+    },
+    {
+        "name": "Santé et Biotechnologie",
+        "description": "Engagé dans l'amélioration de la santé grâce à la biotechnologie et la recherche médicale."
+    },
+    {
+        "name": "Arts et Culture",
+        "description": "Un domaine créatif valorisant l'expression artistique et la préservation culturelle."
+    }
+]

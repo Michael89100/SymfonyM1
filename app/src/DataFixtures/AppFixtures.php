@@ -42,9 +42,12 @@ class AppFixtures extends Fixture
   public function load(ObjectManager $manager): void
   {
 
-    // Chargement du fichier workshops.json
-    $workshopsJson = file_get_contents(__DIR__ . '/workshops.json');
-    $workshopsArray = json_decode($workshopsJson, true);
+    // Chargement des fichiers .json
+    $workshopsArray = json_decode(file_get_contents(__DIR__ . '/workshops.json'), true);
+    $activitiesArray = json_decode(file_get_contents(__DIR__ . '/activities.json'), true);
+    $skillsArray = json_decode(file_get_contents(__DIR__ . '/skills.json'), true);
+    $jobsArray = json_decode(file_get_contents(__DIR__ . '/jobs.json'), true);
+    $sectorsArray = json_decode(file_get_contents(__DIR__ . '/sectors.json'), true);
 
     // Users
     $users = [];
@@ -66,7 +69,7 @@ class AppFixtures extends Fixture
     for ($i = 0; $i < 20; $i++) {
       $activity = new Activity();
       $activity
-        ->setName($this->faker->words(3, true));
+        ->setName($this->faker->randomElement($activitiesArray));
       $activities[] = $activity;
       $manager->persist($activity);
     }
@@ -76,7 +79,7 @@ class AppFixtures extends Fixture
     for ($i = 0; $i < 50; $i++) {
       $skill = new Skill();
       $skill
-        ->setName($this->faker->words(5, true));
+        ->setName($this->faker->randomElement($skillsArray));
       $skills[] = $skill;
       $manager->persist($skill);
     }
@@ -86,7 +89,7 @@ class AppFixtures extends Fixture
     for ($i = 0; $i < 20; $i++) {
       $job = new Job();
       $job
-        ->setName($this->faker->words(3, true));
+        ->setName($this->faker->randomElement($jobsArray));
       for ($j = 0; $j < mt_rand(1, 5); $j++) {
         $job->addActivity($this->faker->randomElement($activities));
       }
@@ -113,8 +116,8 @@ class AppFixtures extends Fixture
     for ($i = 0; $i < 10; $i++) {
       $sector = new Sector();
       $sector
-        ->setName($this->faker->words(3, true))
-        ->setDescription($this->faker->words(3, true));
+        ->setName($this->faker->randomElement($sectorsArray)['name'])
+        ->setDescription($this->faker->randomElement($sectorsArray)['description']);
       $sectors[] = $sector;
       $manager->persist($sector);
     }
@@ -160,6 +163,7 @@ class AppFixtures extends Fixture
       $manager->persist($section);
     }
 
+    // Students
     $students = [];
     for ($j = 0; $j < count($editions); $j++) {
       $usersTemp = $users;

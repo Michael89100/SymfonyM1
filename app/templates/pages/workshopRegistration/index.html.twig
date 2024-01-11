@@ -28,13 +28,13 @@
 			{% endif %}
 			sur 3 maximum.
 		</div>
-		<table class="table mt-4">
+		<table class="table table-hover table-striped mt-4">
 			<thead>
 				<tr class="table-dark">
-					<th scope="col">Atelier</th>
-					<th scope="col">Description</th>
-					<th scope="col">Date & durée</th>
-					<th scope="col">Consulter</th>
+					<th scope="col" class="col-3">Atelier</th>
+					<th scope="col" class="col-auto">Description</th>
+					<th scope="col" class="col-2">Date & durée</th>
+					<th scope="col" class="col-1">Consulter</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -46,9 +46,11 @@
 					{% set roomCapacity = workshopData.roomCapacity %}
 					{% set isFull = workshopData.isFull %}
 
-					<tr class="{{ (isFinished) ? 'table-secondary' : (isFull) ? 'table-danger' : 'table-primary' }}">
+					<tr class="{{ (isFinished) ? '' : (isFull) ? 'table-danger' : '' }}">
 						<td class="align-top">
-							<strong>{{ workshop.name }}</strong>
+							<a href="{{ path('workshop-registration.show', {'id': workshop.id}) }}">
+								<h2 class="h5">{{ workshop.name }}</h2>
+							</a>
 							{% if isFinished %}
 								<br><span class="badge bg-danger">Terminé</span>
 							{% endif %}
@@ -74,8 +76,10 @@
 							{{ workshop.duration }}
 							heures
 						</td>
-						<td class="align-middle">
-							<a class="btn btn-success" href="{{ path('workshop-registration.show', {'id': workshop.id}) }}">Voir la fiche</a>
+						<td class="align-middle text-center">
+							<a class="btn btn-success" href="{{ path('workshop-registration.show', {'id': workshop.id}) }}">
+								<i class="fa-solid fa-eye"></i>
+							</a>
 						</td>
 					</tr>
 				{% else %}

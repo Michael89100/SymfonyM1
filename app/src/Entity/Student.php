@@ -41,6 +41,7 @@ class Student
 
     public function __construct()
     {
+        $this->registrationAt = new \DateTimeImmutable();
         $this->workshops = new ArrayCollection();
     }
 

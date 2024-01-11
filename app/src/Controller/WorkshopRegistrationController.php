@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Edition;
 use App\Entity\Student;
 use App\Entity\User;
 use App\Entity\Workshop;
@@ -29,14 +30,32 @@ class WorkshopRegistrationController extends AbstractController
   {
     // récupération de l'année dans l'url ou de l'année en cours
     $year = $year ?? Date('Y');
-
-    // récupération des workshops dont l'année correspond à l'année dans l'url ou à l'année en cours
     $workshops = $workshopRepository->findWorkshopsByYear($year);
+    $currentUser = $this->getUser();
+
+    $workshopsWithEnrollment = [];
+    foreach ($workshops as $workshop) {
+      $isEnrolled = $this->isUserEnrolled($workshop, $currentUser);
+      $isFinished = $workshop->getEndAt() < new \DateTimeImmutable();
+      $studentCount = $workshop->getStudents()->count();
+      $roomCapacity = $workshop->getRoom()->getCapacityMaximum();
+      $isFull = $studentCount >= $roomCapacity;
+      $workshopsWithEnrollment[] = [
+        'workshop' => $workshop,
+        'isEnrolled' => $isEnrolled,
+        'isFinished' => $isFinished,
+        'studentCount' => $studentCount,
+        'roomCapacity' => $roomCapacity,
+        'isFull' => $isFull,
+      ];
+    }
+
     return $this->render('pages/workshopRegistration/index.html.twig', [
-      'workshops' => $workshops,
+      'workshopsWithEnrollment' => $workshopsWithEnrollment,
       'year' => $year,
       'years' => ['2023', '2024'],
-      'opened' => $year == Date('Y') ? true : false
+      'opened' => $year == Date('Y') ? true : false,
+      'registrationCount' => $this->countWorkshopStudent($workshops[0]->getEdition(), $this->getUser()),
     ]);
   }
 
@@ -96,16 +115,30 @@ class WorkshopRegistrationController extends AbstractController
     }
 
     // On ajoute l'utilisateur à l'atelier
-    // on affiche d'abord le formulaire d'inscription
-    $student = new Student();
-    $form = $this->createForm(StudentType::class, $student, [
-      'action' => $this->generateUrl('workshop-registration.register', ['id' => $workshop->getId()]),
-      'method' => 'POST',
-    ]);
-    $form->handleRequest($request);
-    if ($form->isSubmitted() && $form->isValid()) {
-      $student = $form->getData();
-      $student->setUser($this->getUser());
+    // si l'étudiant n'existe pas encore (pas encore d'inscription sur l'édition, on affiche d'abord le formulaire d'inscription
+    if (!$this->getStudent($workshop->getEdition(), $this->getUser())) {
+      $student = new Student();
+      $form = $this->createForm(StudentType::class, $student, [
+        'action' => $this->generateUrl('workshop-registration.register', ['id' => $workshop->getId()]),
+        'method' => 'POST',
+      ]);
+      $form->handleRequest($request);
+      if ($form->isSubmitted() && $form->isValid()) {
+        $student = $form->getData();
+        $student->setUser($this->getUser());
+        $student->addWorkshop($workshop);
+        $student->setEdition($workshop->getEdition());
+
+        $manager->persist($student);
+        $manager->flush();
+
+        $this->addFlash('success', 'Vous êtes inscrit à l\'atelier ' . $workshop->getName());
+
+        return $this->redirectToRoute('workshop-registration.show', ['id' => $workshop->getId()]);
+      }
+    } else {
+      // si l'étudiant existe déjà (déjà une inscription sur l'édition, on l'ajoute directement à l'atelier
+      $student = $this->getStudent($workshop->getEdition(), $this->getUser());
       $student->addWorkshop($workshop);
 
       $manager->persist($student);
@@ -149,7 +182,7 @@ class WorkshopRegistrationController extends AbstractController
     }
 
     // On supprime l'utilisateur de l'atelier
-    $student = $this->getStudent($workshop, $this->getUser());
+    $student = $this->getStudent($workshop->getEdition(), $this->getUser());
     $student->removeWorkshop($workshop);
 
     $manager->persist($student);
@@ -160,6 +193,11 @@ class WorkshopRegistrationController extends AbstractController
     // On redirige l'utilisateur vers la page de l'atelier
     return $this->redirectToRoute('workshop-registration.show', ['id' => $workshop->getId()]);
   }
+
+
+  // -----------------
+  // Fonctions privées
+  // -----------------
 
   /**
    * cette fonction permet de savoir si un utilisateur est inscrit à un atelier
@@ -175,7 +213,7 @@ class WorkshopRegistrationController extends AbstractController
 
     if ($userId) {
       foreach ($workshop->getStudents() as $student) {
-        if ($student->getUserId() === $userId) {
+        if ($student->getUserId() === $userId && $student->getEdition() === $workshop->getEdition()) {
           $isUserEnrolled = true;
           break; // Arrête la boucle si l'utilisateur est trouvé
         }
@@ -184,30 +222,66 @@ class WorkshopRegistrationController extends AbstractController
     return $isUserEnrolled;
   }
 
-  private function getStudent(Workshop $workshop, User $user): ?Student
+  /**
+   * cette fonction permet de récupérer l'inscription d'un utilisateur à un atelier
+   * @param Edition $edition l'édition de l'atelier
+   * @param User|null $user l'utilisateur connecté
+   * @return Student|null l'inscription de l'utilisateur à l'atelier
+   */
+  private function getStudent(Edition $edition, User $user): ?Student
   {
     $userId = $user ? $user->getId() : null;
-    // Si l'utilisateur est déjà inscrit à l'atelier
-    $student = null; // Flag pour suivre si l'utilisateur est inscrit
 
+    // Si l'utilisateur est déjà inscrit à l'atelier
+    $getStudent = null; // Flag pour suivre si l'utilisateur est inscrit
     if ($userId) {
-      foreach ($workshop->getStudents() as $student) {
-        if ($student->getUserId() === $userId) {
-          $student = $student;
+      foreach ($edition->getStudents() as $student) {
+        if ($student->getUserId() === $userId && $student->getEdition() === $edition) {
+          $getStudent = $student;
           break; // Arrête la boucle si l'utilisateur est trouvé
         }
       }
     }
-    return $student;
+    return $getStudent;
   }
 
+  /**
+   * Cette fonction permet de savoir si l'atelier est complet
+   * @param Workshop $workshop
+   * @return bool
+   */
   private function isWorkshopFull(Workshop $workshop): bool
   {
     return $workshop->getStudents()->count() >= $workshop->getRoom()->getCapacityMaximum();
   }
 
+  /**
+   * Cette fonction permet de savoir si l'atelier est ouvert en fonction de l'année de l'édition
+   * @param Workshop $workshop
+   * @return bool
+   */
   private function isWorkshopOpen(Workshop $workshop): bool
   {
     return $workshop->getEdition()->getYear() == Date('Y');
+  }
+
+  /**
+   * Cette fonction calcule le nombre de fois où un étudiant s'est inscrit à des ateliers sur l'édition
+   * @param Edition $edition
+   * @param User|null $user
+   * @return int
+   */
+  private function countWorkshopStudent(Edition $edition, User $user): int
+  {
+    $userId = $user ? $user->getId() : null;
+    $count = 0;
+    if ($userId) {
+      foreach ($edition->getStudents() as $student) {
+        if ($student->getUserId() === $userId && $student->getEdition() === $edition) {
+          $count++;
+        }
+      }
+    }
+    return $count;
   }
 }

@@ -10,13 +10,23 @@
 			{{year}}</h1>
 		<div class="count mt-4">
 			Il y a
-			{{ workshops|length }}
-			{% if workshops|length > 1 %}
+			{{ workshopsWithEnrollment|length }}
+			{% if workshopsWithEnrollment|length > 1 %}
 				ateliers
 			{% else %}
 				atelier
 			{% endif %}
-			au total.
+			au total pour l'édition
+			{{ year }}.
+			<br>
+			Vous êtes inscrit à
+			{{registrationCount}}
+			{% if registrationCount > 1 %}
+				ateliers
+			{% else %}
+				atelier
+			{% endif %}
+			sur 3 maximum.
 		</div>
 		<table class="table mt-4">
 			<thead>
@@ -28,12 +38,27 @@
 				</tr>
 			</thead>
 			<tbody>
-				{% for workshop in workshops %}
-					{% set isFinished = (workshop.endAt < date('now')) %}
-					<tr class="{{ (isFinished) ? 'table-secondary' : 'table-primary' }}">
-						<td class="align-middle">{{ workshop.name }}
+				{% for workshopData in workshopsWithEnrollment %}
+					{% set workshop = workshopData.workshop %}
+					{% set isEnrolled = workshopData.isEnrolled %}
+					{% set isFinished = workshopData.isFinished %}
+					{% set studentCount = workshopData.studentCount %}
+					{% set roomCapacity = workshopData.roomCapacity %}
+					{% set isFull = workshopData.isFull %}
+
+					<tr class="{{ (isFinished) ? 'table-secondary' : (isFull) ? 'table-danger' : 'table-primary' }}">
+						<td class="align-top">
+							<strong>{{ workshop.name }}</strong>
 							{% if isFinished %}
 								<br><span class="badge bg-danger">Terminé</span>
+							{% endif %}
+							{% if isFull %}
+								<br><span class="badge bg-warning">Complet</span>
+							{% else %}
+								<br>Places :
+								{{ studentCount }}
+								/
+								{{ roomCapacity }}
 							{% endif %}
 						</td>
 						<td>{{ workshop.description}}<br>

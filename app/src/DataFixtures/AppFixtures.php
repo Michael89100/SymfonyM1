@@ -23,9 +23,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use DateTimeImmutable;
-use Symfony\Component\Validator\Constraints\Date;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -43,6 +41,11 @@ class AppFixtures extends Fixture
 
   public function load(ObjectManager $manager): void
   {
+
+    // Chargement du fichier workshops.json
+    $workshopsJson = file_get_contents(__DIR__ . '/workshops.json');
+    $workshopsArray = json_decode($workshopsJson, true);
+
     // Users
     $users = [];
     for ($i = 0; $i < 50; $i++) {
@@ -236,8 +239,8 @@ class AppFixtures extends Fixture
       $randomHours = rand(1, 6);
       $startAt = $edition->getStartAt()->modify($randomHours . " hour");
       $workshop
-        ->setName($this->faker->words(3, true))
-        ->setDescription($this->faker->words(10, true))
+        ->setName($this->faker->randomElement($workshopsArray)['name'])
+        ->setDescription($this->faker->randomElement($workshopsArray)['description'])
         ->setRoom($this->faker->randomElement($rooms))
         ->setSector($this->faker->randomElement($sectors))
         ->setEdition($edition)

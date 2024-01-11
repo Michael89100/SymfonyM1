@@ -157,21 +157,26 @@ class AppFixtures extends Fixture
       $manager->persist($section);
     }
 
-    // Students
     $students = [];
-    for ($i = 0; $i < 40; $i++) {
-      $randomIndex = array_rand($usersTemp);
-      $student = new Student();
-      $student
-        ->setSchoolEmail($this->faker->email())
-        ->setRegistrationAt(DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-1 year', '+1 year')))
-        ->setSchool($this->faker->randomElement($schools))
-        ->setSection($this->faker->randomElement($sections))
-        ->setEdition($this->faker->randomElement($editions))
-        ->setUser($usersTemp[$randomIndex]);
-      $students[] = $student;
-      unset($usersTemp[$randomIndex]);
-      $manager->persist($student);
+    for ($j = 0; $j < count($editions); $j++) {
+      $usersTemp = $users;
+      // récupération de la date de début et de fin de l'édition au format DateTime
+      $dateStart = $editions[$j]->getStartAt()->modify('-6 month')->format('Y-m-d H:i:s');
+      $dateEnd = $editions[$j]->getEndAt()->format('Y-m-d H:i:s');
+      for ($i = 0; $i < mt_rand(20, 40); $i++) {
+        $randomIndex = array_rand($usersTemp);
+        $student = new Student();
+        $student
+          ->setSchoolEmail($this->faker->email())
+          ->setRegistrationAt(DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween($dateStart, $dateEnd)))
+          ->setSchool($this->faker->randomElement($schools))
+          ->setSection($this->faker->randomElement($sections))
+          ->setEdition($editions[$j])
+          ->setUser($usersTemp[$randomIndex]);
+        $manager->persist($student);
+        $students[] = $student;
+        unset($usersTemp[$randomIndex]);
+      }
     }
 
     // Speakers

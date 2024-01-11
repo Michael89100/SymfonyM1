@@ -1,7 +1,7 @@
 {% for label, messages in app.flashes %}
 	{% for message in messages %}
 		<div class="position-fixed top-10 end-0 p-3" style="z-index: 11">
-			<div id="liveFlash" class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+			<div id="liveFlash" class="liveFlash toast" role="alert" aria-live="assertive" aria-atomic="true">
 				<div class="toast-header text-white bg-{{ label }}">
 					<strong class="me-auto">Notification</strong>
 					<small>Maintenant</small>

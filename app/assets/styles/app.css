@@ -3,6 +3,6 @@ body {
 }
 
 .table-responsive {
-    max-height: 400px; /* Ajuste cette valeur pour obtenir la hauteur désirée */
+    max-height: 500px; /* Ajuste cette valeur pour obtenir la hauteur désirée */
     overflow-y: auto;
 }

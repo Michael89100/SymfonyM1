@@ -12,7 +12,7 @@
 					<a class="nav-link {{ (currentPath == path('home.index')) ? 'active' : '' }}" href="{{ path('home.index') }}">Accueil</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link {{ (currentPath == path('workshop-registration.index')) ? 'active' : '' }}" href="{{ path('workshop-registration.index') }}">S'inscrire aux ateliers</a>
+					<a class="nav-link {{ currentPath starts with '/workshop-registration' ? 'active' : '' }}" href="{{ path('workshop-registration.index') }}">S'inscrire aux ateliers</a>
 				</li>
 			</ul>
 			<ul class="navbar-nav">

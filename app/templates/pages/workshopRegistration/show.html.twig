@@ -21,15 +21,20 @@
 				<h1>Atelier ”{{ workshop.name }}”</h1>
 			</div>
 			<div class="col-auto">
-				{% if isUserEnrolled %}
-					<a href="{{ path('workshop-registration.unregister', {'id': workshop.id})}}" class="btn btn-danger btn-lg px-4 me-md-2 fw-bold">Je me désinscrit de cet atelier</a>
-				{% else %}
-					{% if remainingSeats <= 0 %}
-						<a href="#" class="btn btn-danger btn-lg px-4 me-md-2 fw-bold">Complet 😭</a>
+				{% if isOpened %}
+					{% if isUserEnrolled %}
+						<a href="{{ path('workshop-registration.unregister', {'id': workshop.id})}}" class="btn btn-danger btn-lg px-4 me-md-2 fw-bold">Je me désinscrit de cet atelier</a>
 					{% else %}
-						<a href="{{ path('workshop-registration.register', {'id': workshop.id})}}" class="btn btn-success btn-lg px-4 me-md-2 fw-bold">Je m'inscrit à cet atelier !</a>
+						{% if remainingSeats <= 0 %}
+							<a href="#" class="btn btn-danger btn-lg px-4 me-md-2 fw-bold">Complet 😭</a>
+						{% else %}
+							<a href="{{ path('workshop-registration.register', {'id': workshop.id})}}" class="btn btn-success btn-lg px-4 me-md-2 fw-bold">Je m'inscrit à cet atelier !</a>
+						{% endif %}
 					{% endif %}
+				{% else %}
+					<a href="#" class="btn btn-success btn-lg px-4 me-md-2 fw-bold">Terminé ✅</a>
 				{% endif %}
+
 			</div>
 		</div>
 
@@ -67,11 +72,16 @@
 						<tr>
 							<th scope="row">Places restantes</th>
 							<td>
-								{% if remainingSeats <= 0 %}
-									<span class="badge bg-danger">Complet 😭</span>
+								{% if isOpened %}
+									{% if remainingSeats <= 0 %}
+										<span class="badge bg-danger">Complet 😭</span>
+									{% else %}
+										{{ remainingSeats }}
+									{% endif %}
 								{% else %}
-									{{ remainingSeats }}
+									<span class="badge bg-success">Terminé ✅</span>
 								{% endif %}
+
 							</td>
 						</tr>
 						<tr>

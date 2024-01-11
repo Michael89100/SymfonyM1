@@ -77,10 +77,10 @@ class WorkshopRegistrationController extends AbstractController
     $urlReferer = $request->headers->get('referer');
     return $this->render('pages/workshopRegistration/show.html.twig', [
       'workshop' => $workshop,
-      'opened' => $this->isWorkshopOpen($workshop),
+      'isOpened' => $this->isWorkshopOpen($workshop),
       'full' => $this->isWorkshopFull($workshop),
       'year' => $workshop->getEdition()->getYear(),
-      'urlReferer' => $urlReferer,
+      'urlReferer' => $this->generateUrl('workshop-registration.index', ['year' => $workshop->getEdition()->getYear()]),
       'isUserEnrolled' => $this->getUser() ? $this->isUserEnrolled($workshop, $this->getUser()) : false,
     ]);
   }
@@ -111,6 +111,11 @@ class WorkshopRegistrationController extends AbstractController
 
     // Si l'atelier est complet, on le redirige vers la page de l'atelier
     if ($workshop->getStudents()->count() >= $workshop->getRoom()->getCapacityMaximum()) {
+      return $this->redirectToRoute('workshop-registration.show', ['id' => $workshop->getId()]);
+    }
+
+    // Si l'atelier est terminé, on le redirige vers la page de l'atelier
+    if ($workshop->getEndAt() < new \DateTimeImmutable()) {
       return $this->redirectToRoute('workshop-registration.show', ['id' => $workshop->getId()]);
     }
 

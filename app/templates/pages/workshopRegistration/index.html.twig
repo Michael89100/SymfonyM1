@@ -46,9 +46,9 @@
 					{% set roomCapacity = workshopData.roomCapacity %}
 					{% set isFull = workshopData.isFull %}
 
-					<tr class="{{ (isFinished) ? '' : (isFull) ? 'table-danger' : '' }}">
+					<tr class="{{ (isEnrolled) ? 'table-info' : (isFull) ? 'table-danger' : '' }}">
 						<td class="align-top">
-							<a href="{{ path('workshop-registration.show', {'id': workshop.id}) }}">
+							<a style="color:black;text-decoration:none" href="{{ path('workshop-registration.show', {'id': workshop.id}) }}">
 								<h2 class="h5">{{ workshop.name }}</h2>
 							</a>
 							{% if isFinished %}

@@ -14,14 +14,26 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Workshop|null findOneBy(array $criteria, array $orderBy = null)
  * @method Workshop[]    findAll()
  * @method Workshop[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Workshop[]    findByUserAndYear(User $user, int $year)
+ * @method Workshop[]    findBySpeaker(User $user)
+ * @author Olivier Perdrix
  */
 class WorkshopRepository extends ServiceEntityRepository
 {
+    /**
+     * WorkshopRepository constructor.
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Workshop::class);
     }
 
+    /**
+     * Cette méthode permet de récupérer les ateliers d'une édition
+     * 
+     * @param int $editionYear L'année de l'édition dont on veut récupérer les ateliers
+     * @return Workshop[] La liste des ateliers de l'édition
+     */
     public function findWorkshopsByYear(int $editionYear): array
     {
         return $this->createQueryBuilder('w')
@@ -32,6 +44,12 @@ class WorkshopRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * Cette méthode permet de récupérer les ateliers d'un utilisateur en tant qu'étudiant pour une édition donnée
+     * 
+     * @param User $user L'utilisateur dont on veut récupérer les ateliers
+     * @return Workshop[] La liste des ateliers de l'utilisateur
+     */
     public function findByUserAndYear(User $user, int $year): array
     {
         return $this->createQueryBuilder('w')
@@ -41,6 +59,25 @@ class WorkshopRepository extends ServiceEntityRepository
             ->andWhere('s.User = :User')
             ->setParameter('year', $year)
             ->setParameter('User', $user)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Cette méthode permet de récupérer les ateliers d'un utilisateur en tant qu'intervenant
+     * 
+     * @param User $user L'utilisateur dont on veut récupérer les ateliers
+     * @return Workshop[] La liste des ateliers de l'utilisateur
+     */
+    public function findBySpeaker(User $user): array
+    {
+        return $this->createQueryBuilder('w')
+            ->join('w.speakers', 's')
+            ->join('w.edition', 'e')
+            ->where('s.User = :User')
+            ->setParameter('User', $user)
+            ->orderBy('e.year', 'DESC')
+            ->addOrderBy('w.startAt', 'ASC')
             ->getQuery()
             ->getResult();
     }

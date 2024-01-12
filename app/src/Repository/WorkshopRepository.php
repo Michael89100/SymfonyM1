@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Workshop;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -27,6 +28,19 @@ class WorkshopRepository extends ServiceEntityRepository
             ->join('w.edition', 'e')
             ->where('e.year = :editionYear')
             ->setParameter('editionYear', $editionYear)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByUserAndYear(User $user, int $year): array
+    {
+        return $this->createQueryBuilder('w')
+            ->join('w.edition', 'e')
+            ->join('w.students', 's')
+            ->where('e.year = :year')
+            ->andWhere('s.User = :User')
+            ->setParameter('year', $year)
+            ->setParameter('User', $user)
             ->getQuery()
             ->getResult();
     }

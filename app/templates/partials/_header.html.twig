@@ -14,13 +14,21 @@
 				<li class="nav-item">
 					<a class="nav-link {{ currentPath starts with '/workshop-registration' ? 'active' : '' }}" href="{{ path('workshop-registration.index') }}">S'inscrire aux ateliers</a>
 				</li>
+				{% if app.user %}
+					<li class="nav-item">
+						<a class="nav-link {{ (currentPath == path('user.workshops', {'id': app.user.id})) ? 'active' : '' }}" href="{{ path('user.workshops', {'id': app.user.id}) }}">Mes ateliers</a>
+					</li>
+				{% endif %}
 			</ul>
 			<ul class="navbar-nav">
 				{% if app.user %}
-					<li class="nav-item dropdown" style="margin-right: 10rem">
-						<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{ app.user.firstName }}</a>
+					<li class="nav-item dropstart">
+						<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Bienvenue
+							{{ app.user.firstName }}
+							!</a>
 						<div class="dropdown-menu">
 							<a class="dropdown-item {{ (currentPath == path('user.edit', {'id': app.user.id})) ? 'active' : '' }}" href="{{ path('user.edit', {'id': app.user.id}) }}">Mes information</a>
+							<a class="dropdown-item {{ (currentPath == path('user.workshops', {'id': app.user.id})) ? 'active' : '' }}" href="{{ path('user.workshops', {'id': app.user.id}) }}">Mes ateliers</a>
 							<a class="dropdown-item {{ (currentPath == path('user.edit.password', {'id': app.user.id})) ? 'active' : '' }}" href="{{ path('user.edit.password', {'id': app.user.id}) }}">Modifier mon mot de passe</a>
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="{{ path('security.logout')}}">Se déconnecter</a>

@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum des métiers - Mes inscriptions aux ateliers
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-4">
+		<h1>Liste des ateliers où vous intervenez</h1>
+		<div class="count mt-4">
+			Vous intervenez dans
+			{{workshopsWithEnrollment|length}}
+			{% if workshopsWithEnrollment|length > 1 %}
+				ateliers.
+			{% else %}
+				atelier.
+			{% endif %}
+		</div>
+		<table class="table table-hover table-striped mt-4">
+			<thead class="position-sticky top-0">
+				<tr class="table-dark">
+					<th scope="col" class="col-3">Atelier</th>
+					<th scope="col" class="col-auto">Description</th>
+					<th scope="col" class="col-2">Date & durée</th>
+					<th scope="col" class="col-1">Consulter</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for workshopData in workshopsWithEnrollment %}
+					{% set workshop = workshopData.workshop %}
+					{% set isFinished = workshopData.isFinished %}
+					{% set studentCount = workshopData.studentCount %}
+					{% set roomCapacity = workshopData.roomCapacity %}
+					{% set isFull = workshopData.isFull %}
+
+					<tr class="{{ (isFinished) ? 'table-dark' : '' }}">
+						<td class="align-top">
+							<a style="color:black;text-decoration:none" href="{{ path('workshop-registration.show', {'id': workshop.id}) }}">
+								<h2 class="h5">{{ workshop.name }}</h2>
+							</a>
+							{% if isFinished %}
+								<br><span class="badge bg-danger">Terminé</span>
+							{% endif %}
+							{% if isFull %}
+								<br><span class="badge bg-warning">Complet</span>
+							{% else %}
+								<br>Places :
+								{{ studentCount }}
+								/
+								{{ roomCapacity }}
+							{% endif %}
+						</td>
+						<td>{{ workshop.description}}<br>
+							<strong>Intervenants :</strong>
+							{% for speaker in workshop.speakers %}
+								{% if user == speaker.user %}
+									<span class="badge bg-info">Vous</span>
+								{% else %}
+									<span class="badge bg-success">{{ speaker.user.firstName }}
+										{{ speaker.user.lastName }}</span>
+								{% endif %}
+							{% endfor %}
+							<br>
+						</td>
+						<td class="align-middle">{{ workshop.startAt | format_datetime(locale='fr') }}<br>
+							{{ workshop.duration }}
+							heures
+						</td>
+						<td class="align-middle text-center">
+							<a class="btn btn-success" href="{{ path('user.speakers.workshop', {'user': user.id, 'workshop': workshop.id}) }}">
+								<i class="fa-solid fa-eye"></i>
+							</a>
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td class="table-secondary" colspan="4">Pas d'inscriptions trouvées</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+	</div>
+{% endblock %}

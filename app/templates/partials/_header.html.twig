@@ -16,9 +16,18 @@
 				</li>
 				{% if app.user %}
 					<li class="nav-item">
-						<a class="nav-link {{ (currentPath == path('user.workshops', {'id': app.user.id})) ? 'active' : '' }}" href="{{ path('user.workshops', {'id': app.user.id}) }}">Mes ateliers</a>
+						<a class="nav-link {{ (currentPath == path('user.workshops', {'id': app.user.id})) ? 'active' : '' }}" href="{{ path('user.workshops', {'id': app.user.id}) }}">Mes inscriptions</a>
 					</li>
 				{% endif %}
+				<!-- espace pour ceux qui ont le role_speaker -->
+				{% if is_granted('ROLE_SPEAKER') %}
+					<li class="nav-item">
+						{% set speakerUrl = '/user/' ~ user.id ~ '/speakers' %}
+						<a class="nav-link {{ currentPath starts with speakerUrl ? 'active' : '' }}" href="{{ path('user.speakers.workspace', {'id': app.user.id}) }}">Mon espace intervenant</a>
+					</li>
+				{% endif %}
+
+
 			</ul>
 			<ul class="navbar-nav">
 				{% if app.user %}

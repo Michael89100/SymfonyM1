@@ -196,8 +196,10 @@ class AppFixtures extends Fixture
         ->setResgistrationAt(DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-1 year', '+1 year')))
         ->setUser($usersTemp[$randomIndex]);
       $speakers[] = $speaker;
-      unset($usersTemp[$randomIndex]);
       $manager->persist($speaker);
+      $speaker->getUser()->setRoles(['ROLE_USER', 'ROLE_SPEAKER']);
+      $manager->persist($speaker->getUser());
+      unset($usersTemp[$randomIndex]);
     }
 
     // Quiz

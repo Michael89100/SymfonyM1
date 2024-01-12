@@ -7,6 +7,7 @@ use App\Entity\Student;
 use App\Entity\User;
 use App\Entity\Workshop;
 use App\Form\StudentType;
+use App\Repository\StudentRepository;
 use App\Repository\WorkshopRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,6 +19,14 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/workshop-registration', name: 'workshop-registration')]
 class WorkshopRegistrationController extends AbstractController
 {
+
+  private $studentRepository;
+
+  public function __construct(StudentRepository $studentRepository)
+  {
+    $this->studentRepository = $studentRepository;
+  }
+
   /**
    * Cette route permet d'afficher la liste des ateliers dont l'édition est sur l'année en cours ou sur l'année passée en paramètre dans l'url
    * @Route("/{year}", name="workshop-registration", methods={"GET"})
@@ -66,21 +75,20 @@ class WorkshopRegistrationController extends AbstractController
    * @return Response
    */
   #[Route('/{id}', name: '.show', methods: ['GET'])]
-  public function show(Workshop $workshop, Request $request, #[MapQueryParameter] string $backto = null): Response
+  public function show(Workshop $workshop, #[MapQueryParameter] string $backto = null): Response
   {
     // Si l'atelier n'existe pas, on renvoie une erreur 404
     if (!$workshop) {
       throw $this->createNotFoundException('L\'atelier n\'existe pas');
     }
-
-    if ($backto == 'user.workshops') {
-      $urlReferer = $this->generateUrl($backto, ['id' => $this->getUser()->getId()]);
-    } else {
-      $urlReferer = $this->generateUrl('workshop-registration.index', ['year' => $workshop->getEdition()->getYear()]);
-    }
-
     // Récupérer l'URL de la page appelante
-    $urlReferer = $request->headers->get('referer');
+    //$urlReferer = $request->headers->get('referer');
+    // if ($backto == 'user.workshops') {
+    //   $urlReferer = $this->generateUrl($backto, ['id' => $user->getId()]);
+    // } else {
+    $urlReferer = $this->generateUrl('workshop-registration.index', ['year' => $workshop->getEdition()->getYear()]);
+    // }
+
     return $this->render('pages/workshopRegistration/show.html.twig', [
       'workshop' => $workshop,
       'isOpened' => $this->isWorkshopOpen($workshop),
@@ -122,6 +130,12 @@ class WorkshopRegistrationController extends AbstractController
 
     // Si l'atelier est terminé, on le redirige vers la page de l'atelier
     if ($workshop->getEndAt() < new \DateTimeImmutable()) {
+      return $this->redirectToRoute('workshop-registration.show', ['id' => $workshop->getId()]);
+    }
+
+    // Si l'utilisateur est déjà inscrit à 3 ateliers de l'édition, on le redirige vers la page de l'atelier
+    if ($this->countWorkshopStudent($workshop->getEdition(), $this->getUser()) >= 3) {
+      $this->addFlash('warning', 'Vous êtes déjà inscrit à 3 ateliers sur l\'édition ' . $workshop->getEdition()->getYear());
       return $this->redirectToRoute('workshop-registration.show', ['id' => $workshop->getId()]);
     }
 
@@ -174,7 +188,7 @@ class WorkshopRegistrationController extends AbstractController
    * @return Response
    */
   #[Route('/{id}/unregister', name: '.unregister', methods: ['GET', 'POST'])]
-  public function unregister(Workshop $workshop, Request $request, EntityManagerInterface $manager): Response
+  public function unregister(Workshop $workshop, EntityManagerInterface $manager): Response
   {
     // Si l'atelier n'existe pas, on renvoie une erreur 404
     if (!$workshop) {
@@ -284,15 +298,11 @@ class WorkshopRegistrationController extends AbstractController
    */
   private function countWorkshopStudent(Edition $edition, User $user = null): int
   {
-    $userId = $user ? $user->getId() : null;
-    $count = 0;
-    if ($userId) {
-      foreach ($edition->getStudents() as $student) {
-        if ($student->getUserId() === $userId && $student->getEdition() === $edition) {
-          $count++;
-        }
-      }
+    $student = $this->getStudent($edition, $user);
+    if ($student) {
+      return $student->getWorkshops()->count();
+    } else {
+      return 0;
     }
-    return $count;
   }
 }

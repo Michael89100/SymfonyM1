@@ -14,6 +14,11 @@
 				<li class="nav-item">
 					<a class="nav-link {{ currentPath starts with '/workshop-registration' ? 'active' : '' }}" href="{{ path('workshop-registration.index') }}">S'inscrire aux ateliers</a>
 				</li>
+				{% if app.user %}
+					<li class="nav-item">
+						<a class="nav-link {{ (currentPath == path('user.workshops', {'id': app.user.id})) ? 'active' : '' }}" href="{{ path('user.workshops', {'id': app.user.id}) }}">Mes ateliers</a>
+					</li>
+				{% endif %}
 			</ul>
 			<ul class="navbar-nav">
 				{% if app.user %}

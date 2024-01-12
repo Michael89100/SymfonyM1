@@ -66,11 +66,17 @@ class WorkshopRegistrationController extends AbstractController
    * @return Response
    */
   #[Route('/{id}', name: '.show', methods: ['GET'])]
-  public function show(Workshop $workshop, Request $request): Response
+  public function show(Workshop $workshop, Request $request, #[MapQueryParameter] string $backto = null): Response
   {
     // Si l'atelier n'existe pas, on renvoie une erreur 404
     if (!$workshop) {
       throw $this->createNotFoundException('L\'atelier n\'existe pas');
+    }
+
+    if ($backto == 'user.workshops') {
+      $urlReferer = $this->generateUrl($backto, ['id' => $this->getUser()->getId()]);
+    } else {
+      $urlReferer = $this->generateUrl('workshop-registration.index', ['year' => $workshop->getEdition()->getYear()]);
     }
 
     // Récupérer l'URL de la page appelante
@@ -80,7 +86,7 @@ class WorkshopRegistrationController extends AbstractController
       'isOpened' => $this->isWorkshopOpen($workshop),
       'full' => $this->isWorkshopFull($workshop),
       'year' => $workshop->getEdition()->getYear(),
-      'urlReferer' => $this->generateUrl('workshop-registration.index', ['year' => $workshop->getEdition()->getYear()]),
+      'urlReferer' => $urlReferer,
       'isUserEnrolled' => $this->getUser() ? $this->isUserEnrolled($workshop, $this->getUser()) : false,
     ]);
   }

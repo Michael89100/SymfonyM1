@@ -15,14 +15,10 @@ class SectionCrudController extends AbstractCrudController
         return Section::class;
     }
 
-    /*
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
+            TextField::new('name'),
         ];
     }
-    */
 }

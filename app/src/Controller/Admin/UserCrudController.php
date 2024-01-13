@@ -37,6 +37,7 @@ class UserCrudController extends AbstractCrudController
                 ->setChoices([
                     'Simple utilisateur' => 'ROLE_USER',
                     'Administrateur' => 'ROLE_ADMIN',
+                    'Intervenant' => 'ROLE_SPEAKER',
                 ])
                 ->allowMultipleChoices()
                 ->autocomplete()
@@ -45,13 +46,30 @@ class UserCrudController extends AbstractCrudController
 
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-
         $entityInstance->setPassword(
             $this->passwordHasher->hashPassword(
                 $entityInstance,
                 $entityInstance->getPlainPassword()
             )
         );
+
         parent::persistEntity($entityManager, $entityInstance);
+    }
+
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        // Only hash password if plainPassword is provided
+        if ($entityInstance->getPlainPassword() !== null && $entityInstance->getPlainPassword() !== '') {
+            $entityInstance->setPassword(
+                $this->passwordHasher->hashPassword(
+                    $entityInstance,
+                    $entityInstance->getPlainPassword()
+                )
+            );
+        } else {
+            $entityInstance->setPassword($entityInstance->getPassword());
+        }
+
+        parent::updateEntity($entityManager, $entityInstance);
     }
 }

@@ -1,5 +1,6 @@
 {
     "require": {
+        "easycorp/easyadmin-bundle": "^4.8"
         "symfony/mailer": "^6.4"
     }
 }

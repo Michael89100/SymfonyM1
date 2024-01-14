@@ -78,6 +78,14 @@ class SecurityController extends AbstractController
       $manager->persist($user);
       $manager->flush();
 
+      $this->emailVerifier->send(
+            (new TemplatedEmail())
+                ->from(new Address('no-reply@projetM1.com', 'ProjetM1'))
+                ->to($user->getEmail())
+                ->subject('Bienvenue sur le site!')
+                ->htmlTemplate('security/registration.html.twig')
+        );
+        
       $this->addFlash('success', 'Votre compte a bien été créé !');
 
       return $this->redirectToRoute('security.login');

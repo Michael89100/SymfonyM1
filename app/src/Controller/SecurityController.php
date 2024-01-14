@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mime\Address;
 
 class SecurityController extends AbstractController
 {
@@ -59,7 +62,7 @@ class SecurityController extends AbstractController
    * @return Response
    */
   #[Route('/signin', name: 'security.registration', methods: ['GET', 'POST'])]
-  public function registration(Request $request, EntityManagerInterface $manager): Response
+  public function registration(Request $request, EntityManagerInterface $manager, MailerInterface $mailer): Response
   {
     // Interdire la route aux personnes déjà connectées
     if ($this->getUser()) {
@@ -78,6 +81,16 @@ class SecurityController extends AbstractController
       $manager->persist($user);
       $manager->flush();
 
+      $email = (new TemplatedEmail())
+        ->from(new Address('no-reply@projetM1.com', 'ProjetM1'))
+        ->to($user->getEmail())
+        ->subject('Bienvenue sur le site!')
+        ->htmlTemplate('pages/security/email.html.twig') 
+        ->context([
+          'user' => $user,
+        ]);
+
+      $mailer->send($email);  
       $this->addFlash('success', 'Votre compte a bien été créé !');
 
       return $this->redirectToRoute('security.login');

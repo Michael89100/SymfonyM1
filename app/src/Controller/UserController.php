@@ -60,6 +60,8 @@ class UserController extends AbstractController
     }
 
     $form = $this->createForm(UserType::class, $user);
+    
+    $isNewUser = $user->getId() === null;
 
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
@@ -82,7 +84,7 @@ class UserController extends AbstractController
             ->from('Yms.michael89') 
             ->to($user->getEmail())
             ->subject('Bienvenue sur le site!')
-            ->htmlTemplate('registration.html.twig') // Assurez-vous que ce template existe
+            ->htmlTemplate('registration.html.twig') 
             ->context([
                 'user' => $user
             ]);

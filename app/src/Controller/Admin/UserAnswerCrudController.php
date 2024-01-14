@@ -19,9 +19,14 @@ class UserAnswerCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('name'),
-            AssociationField::new('question'),
-            AssociationField::new('user'),
+            TextField::new('response'),
+            AssociationField::new('question')
+                ->setCrudController(QuestionCrudController::class)
+                ->autocomplete(),
+            AssociationField::new('user')
+                ->setCrudController(UserCrudController::class)
+                ->setFormTypeOptions(['label' => 'utilisateur'])
+                ->autocomplete(),
         ];
     }
 }

@@ -20,7 +20,10 @@ class QuizCrudController extends AbstractCrudController
     {
         return [
             TextField::new('name'),
-            AssociationField::new('edition'),
+            AssociationField::new('workshop')
+                ->setCrudController(WorkshopCrudController::class)
+                ->setFormTypeOptions(['label' => 'atelier'])
+                ->autocomplete(),
         ];
     }
 }

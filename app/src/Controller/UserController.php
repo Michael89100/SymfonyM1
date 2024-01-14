@@ -75,6 +75,20 @@ class UserController extends AbstractController
       } else {
         $this->addFlash('warning', 'Le mot de passe actuel est incorrect.');
       }
+
+      if ($isNewUser) {
+        // Envoi de l'email
+        $email = (new TemplatedEmail())
+            ->from('Yms.michael89') 
+            ->to($user->getEmail())
+            ->subject('Bienvenue sur le site!')
+            ->htmlTemplate('registration.html.twig') // Assurez-vous que ce template existe
+            ->context([
+                'user' => $user
+            ]);
+
+        $mailer->send($email);
+    }
     }
 
     return $this->render('pages/user/edit.html.twig', [

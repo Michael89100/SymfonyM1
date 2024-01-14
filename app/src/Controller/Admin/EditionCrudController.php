@@ -23,7 +23,7 @@ class EditionCrudController extends AbstractCrudController
             IntegerField::new('year'),
             DateTimeField::new('startAt'),
             DateTimeField::new('endAt'),
-
+            TextField::new('address'),
         ];
     }
 }

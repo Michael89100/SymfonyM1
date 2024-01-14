@@ -20,23 +20,30 @@ class StudentCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('schoolEmail'),
+            TextField::new('schoolEmail')
+                ->setFormTypeOptions(['label' => "email de l'école"]),
             AssociationField::new('section')
                 ->setCrudController(SectionCrudController::class)
                 ->autocomplete(),
             AssociationField::new('school')
                 ->setCrudController(SchoolCrudController::class)
+                ->setFormTypeOptions(['label' => 'école'])
                 ->autocomplete(),
             AssociationField::new('edition')
                 ->setCrudController(EditionCrudController::class)
+                ->setFormTypeOptions(['label' => 'édition'])
                 ->autocomplete(),
             AssociationField::new('workshops')
                 ->setCrudController(WorkshopCrudController::class)
+                ->setFormTypeOptions(['label' => 'ateliers'])
                 ->autocomplete(),
             AssociationField::new('user')
-                ->setCrudController(UserCrudController::class)
+            ->setCrudController(UserCrudController::class)
+                ->setFormTypeOptions([
+                    'by_reference' => true,
+                    'label' => 'Utilisateur'
+                ])
                 ->autocomplete(),
-
         ];
     }
 }

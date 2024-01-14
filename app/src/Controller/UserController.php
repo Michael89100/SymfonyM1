@@ -60,8 +60,6 @@ class UserController extends AbstractController
     }
 
     $form = $this->createForm(UserType::class, $user);
-    
-    $isNewUser = $user->getId() === null;
 
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
@@ -77,20 +75,6 @@ class UserController extends AbstractController
       } else {
         $this->addFlash('warning', 'Le mot de passe actuel est incorrect.');
       }
-
-      if ($isNewUser) {
-        // Envoi de l'email
-        $email = (new TemplatedEmail())
-            ->from('Yms.michael89') 
-            ->to($user->getEmail())
-            ->subject('Bienvenue sur le site!')
-            ->htmlTemplate('registration.html.twig') 
-            ->context([
-                'user' => $user
-            ]);
-
-        $mailer->send($email);
-    }
     }
 
     return $this->render('pages/user/edit.html.twig', [

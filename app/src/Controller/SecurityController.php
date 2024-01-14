@@ -85,7 +85,10 @@ class SecurityController extends AbstractController
         ->from(new Address('no-reply@projetM1.com', 'ProjetM1'))
         ->to($user->getEmail())
         ->subject('Bienvenue sur le site!')
-        ->htmlTemplate('pages/security/registration.html.twig');
+        ->htmlTemplate('pages/security/email.html.twig') 
+        ->context([
+          'user' => $user,
+        ]);
 
       $mailer->send($email);  
       $this->addFlash('success', 'Votre compte a bien été créé !');

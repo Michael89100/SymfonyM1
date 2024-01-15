@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit UserAnswer{% endblock %}
+
+{% block body %}
+    <h1>Edit UserAnswer</h1>
+
+    {{ include('pages/admin/user_answer/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('user_answer.index') }}">back to list</a>
+
+    {{ include('pages/admin/user_answer/_delete_form.html.twig') }}
+{% endblock %}

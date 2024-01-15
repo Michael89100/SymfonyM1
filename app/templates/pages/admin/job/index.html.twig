@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Job index{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Liste des métiers</h1>
+    <a class="btn btn-primary" href="{{ path('job.new') }}">Ajouter un nouveau métier</a>
+    <div class="count mt-4">
+        Il y a
+        {{ jobs.getTotalItemCount }}
+        métiers au total.
+    </div>
+    <table class="table mt-4">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">Id</th>
+                <th scope="col">Métiers</th>
+                <th scope="col">actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for job in jobs %}
+            <tr class="table-primary">
+                <th scope="row">{{ job.id }}</th>
+                <td>{{ job.name }}</td>
+                <td>
+                    <a class="btn btn-success" href="{{ path('job.show', {'id': job.id}) }}">Voir</a>
+                    <a class="btn btn-info" href="{{ path('job.edit', {'id': job.id}) }}">Editer</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3">Pas de métiers trouvés</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="navigation d-flex justify-content-center mt-4">
+        {{ knp_pagination_render(jobs) }}
+    </div>
+
+</div>
+{% endblock %}

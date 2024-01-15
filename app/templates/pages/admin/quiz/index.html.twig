@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quiz{% endblock %}
+
+{% block body %}
+    <h1>Quiz</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for quiz in quizzes %}
+            <tr>
+                <td>{{ quiz.id }}</td>
+                <td>{{ quiz.name }}</td>
+                <td>
+                    <a href="{{ path('quiz.show', {'id': quiz.id}) }}">Show</a>
+                    <a href="{{ path('quiz.edit', {'id': quiz.id}) }}">Edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">No records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('quiz.new') }}">Create new</a>
+{% endblock %}

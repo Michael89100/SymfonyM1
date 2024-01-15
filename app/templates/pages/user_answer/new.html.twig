@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New UserAnswer{% endblock %}
+
+{% block body %}
+    {{ include('pages/user_answer/_form.html.twig', { 'questions': questions, 'form': form }) }}
+{% endblock %}

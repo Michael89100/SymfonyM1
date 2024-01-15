@@ -1,0 +1,61 @@
+{% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+	<div class="container-fluid">
+		<a class="navbar-brand" href="#">Forum des métiers</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarColor01">
+			<ul class="navbar-nav me-auto">
+				<li class="nav-item">
+					<a class="nav-link {{ (currentPath == path('home.index')) ? 'active' : '' }}" href="{{ path('home.index') }}">Accueil</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link {{ currentPath starts with '/workshop-registration' ? 'active' : '' }}" href="{{ path('workshop-registration.index') }}">S'inscrire aux ateliers</a>
+				</li>
+				{% if app.user %}
+					<li class="nav-item">
+						<a class="nav-link {{ (currentPath == path('user.workshops', {'id': app.user.id})) ? 'active' : '' }}" href="{{ path('user.workshops', {'id': app.user.id}) }}">Mes inscriptions</a>
+					</li>
+				{% endif %}
+				<!-- espace pour ceux qui ont le role_speaker -->
+				{% if is_granted('ROLE_SPEAKER') %}
+					<li class="nav-item">
+						{% set speakerUrl = '/user/' ~ app.user.id ~ '/speakers' %}
+						<a class="nav-link {{ currentPath starts with speakerUrl ? 'active' : '' }}" href="{{ path('user.speakers.workspace', {'id': app.user.id}) }}">Mon espace intervenant</a>
+					</li>
+				{% endif %}
+
+
+			</ul>
+			<ul class="navbar-nav">
+				{% if app.user %}
+					<li class="nav-item dropstart">
+						<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Bienvenue
+							{{ app.user.firstName }}
+							!</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item {{ (currentPath == path('user.edit', {'id': app.user.id})) ? 'active' : '' }}" href="{{ path('user.edit', {'id': app.user.id}) }}">Mes information</a>
+							<a class="dropdown-item {{ (currentPath == path('user.workshops', {'id': app.user.id})) ? 'active' : '' }}" href="{{ path('user.workshops', {'id': app.user.id}) }}">Mes ateliers</a>
+							<a class="dropdown-item {{ (currentPath == path('user.edit.password', {'id': app.user.id})) ? 'active' : '' }}" href="{{ path('user.edit.password', {'id': app.user.id}) }}">Modifier mon mot de passe</a>
+							<div class="dropdown-divider"></div>
+							{% if is_granted('ROLE_ADMIN') %}
+								<a class="dropdown-item" href="{{ path('admin')}}">Administration</a>
+							{% endif %}
+							<a class="dropdown-item" href="{{ path('security.logout')}}">Se déconnecter</a>
+						</div>
+					</li>
+				{% else %}
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('security.login')}}">Me connecter</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('security.registration')}}">M'inscrire</a>
+					</li>
+				{% endif %}
+
+			</ul>
+		</div>
+	</div>
+</nav>

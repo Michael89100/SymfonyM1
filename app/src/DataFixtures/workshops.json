@@ -1,0 +1,162 @@
+[
+    {
+        "name": "Intelligence Artificielle: Masterclass",
+        "description": "Découvrez les concepts clés de l'IA et comment ils sont appliqués dans le monde réel."
+    },
+    {
+        "name": "Data Science: Conférence",
+        "description": "Explorez le monde des données et apprenez à les analyser pour en tirer des insights pertinents."
+    },
+    {
+        "name": "DevOps: Initiation",
+        "description": "Comprenez l'importance de l'intégration et du déploiement continus dans le développement logiciel."
+    },
+    {
+        "name": "UI/UX Design: Conférence",
+        "description": "Découvrez les meilleures pratiques pour concevoir des interfaces utilisateurs intuitives et attrayantes."
+    },
+    {
+        "name": "DevOps: Table Ronde",
+        "description": "Comprenez l'importance de l'intégration et du déploiement continus dans le développement logiciel."
+    },
+    {
+        "name": "IoT: Masterclass",
+        "description": "Apprenez comment l'Internet des Objets transforme notre quotidien et notre manière de travailler."
+    },
+    {
+        "name": "Marketing Digital: Workshop",
+        "description": "Apprenez à utiliser les outils numériques pour promouvoir efficacement vos produits ou services."
+    },
+    {
+        "name": "Design Graphique: Masterclass",
+        "description": "Découvrez les principes du design graphique et créez vos propres projets visuels."
+    },
+    {
+        "name": "Marketing Digital: Conférence",
+        "description": "Apprenez à utiliser les outils numériques pour promouvoir efficacement vos produits ou services."
+    },
+    {
+        "name": "IoT: Conférence",
+        "description": "Apprenez comment l'Internet des Objets transforme notre quotidien et notre manière de travailler."
+    },
+    {
+        "name": "Développement Web: Masterclass",
+        "description": "Apprenez les bases du développement web en utilisant des technologies modernes comme React et Node.js."
+    },
+    {
+        "name": "IoT: Table Ronde",
+        "description": "Apprenez comment l'Internet des Objets transforme notre quotidien et notre manière de travailler."
+    },
+    {
+        "name": "Intelligence Artificielle: Conférence",
+        "description": "Découvrez les concepts clés de l'IA et comment ils sont appliqués dans le monde réel."
+    },
+    {
+        "name": "DevOps: Table Ronde",
+        "description": "Comprenez l'importance de l'intégration et du déploiement continus dans le développement logiciel."
+    },
+    {
+        "name": "Développement Web: Conférence",
+        "description": "Apprenez les bases du développement web en utilisant des technologies modernes comme React et Node.js."
+    },
+    {
+        "name": "Data Science: Masterclass",
+        "description": "Explorez le monde des données et apprenez à les analyser pour en tirer des insights pertinents."
+    },
+    {
+        "name": "Data Science: Initiation",
+        "description": "Explorez le monde des données et apprenez à les analyser pour en tirer des insights pertinents."
+    },
+    {
+        "name": "Data Science: Conférence",
+        "description": "Explorez le monde des données et apprenez à les analyser pour en tirer des insights pertinents."
+    },
+    {
+        "name": "Blockchain: Masterclass",
+        "description": "Explorez les fondamentaux de la blockchain et son impact sur les industries diverses."
+    },
+    {
+        "name": "UI/UX Design: Conférence",
+        "description": "Découvrez les meilleures pratiques pour concevoir des interfaces utilisateurs intuitives et attrayantes."
+    },
+    {
+        "name": "DevOps: Conférence",
+        "description": "Comprenez l'importance de l'intégration et du déploiement continus dans le développement logiciel."
+    },
+    {
+        "name": "Data Science: Masterclass",
+        "description": "Explorez le monde des données et apprenez à les analyser pour en tirer des insights pertinents."
+    },
+    {
+        "name": "Data Science: Conférence",
+        "description": "Explorez le monde des données et apprenez à les analyser pour en tirer des insights pertinents."
+    },
+    {
+        "name": "UI/UX Design: Initiation",
+        "description": "Découvrez les meilleures pratiques pour concevoir des interfaces utilisateurs intuitives et attrayantes."
+    },
+    {
+        "name": "Blockchain: Masterclass",
+        "description": "Explorez les fondamentaux de la blockchain et son impact sur les industries diverses."
+    },
+    {
+        "name": "Développement Web: Initiation",
+        "description": "Apprenez les bases du développement web en utilisant des technologies modernes comme React et Node.js."
+    },
+    {
+        "name": "UI/UX Design: Table Ronde",
+        "description": "Découvrez les meilleures pratiques pour concevoir des interfaces utilisateurs intuitives et attrayantes."
+    },
+    {
+        "name": "Intelligence Artificielle: Masterclass",
+        "description": "Découvrez les concepts clés de l'IA et comment ils sont appliqués dans le monde réel."
+    },
+    {
+        "name": "DevOps: Masterclass",
+        "description": "Comprenez l'importance de l'intégration et du déploiement continus dans le développement logiciel."
+    },
+    {
+        "name": "Data Science: Workshop",
+        "description": "Explorez le monde des données et apprenez à les analyser pour en tirer des insights pertinents."
+    },
+    {
+        "name": "Développement Web: Masterclass",
+        "description": "Apprenez les bases du développement web en utilisant des technologies modernes comme React et Node.js."
+    },
+    {
+        "name": "Design Graphique: Initiation",
+        "description": "Découvrez les principes du design graphique et créez vos propres projets visuels."
+    },
+    {
+        "name": "Cybersécurité: Initiation",
+        "description": "Comprenez l'importance de la sécurité informatique et apprenez à protéger les systèmes contre les cyberattaques."
+    },
+    {
+        "name": "Blockchain: Conférence",
+        "description": "Explorez les fondamentaux de la blockchain et son impact sur les industries diverses."
+    },
+    {
+        "name": "Cybersécurité: Workshop",
+        "description": "Comprenez l'importance de la sécurité informatique et apprenez à protéger les systèmes contre les cyberattaques."
+    },
+    {
+        "name": "Marketing Digital: Initiation",
+        "description": "Apprenez à utiliser les outils numériques pour promouvoir efficacement vos produits ou services."
+    },
+    {
+        "name": "Cybersécurité: Masterclass",
+        "description": "Comprenez l'importance de la sécurité informatique et apprenez à protéger les systèmes contre les cyberattaques."
+    },
+    {
+        "name": "Développement Web: Conférence",
+        "description": "Apprenez les bases du développement web en utilisant des technologies modernes comme React et Node.js."
+    },
+    {
+        "name": "Data Science: Table Ronde",
+        "description": "Explorez le monde des données et apprenez à les analyser pour en tirer des insights pertinents."
+    },
+    {
+        "name": "UI/UX Design: Workshop",
+        "description": "Découvrez les meilleures pratiques pour concevoir des interfaces utilisateurs intuitives et attrayantes."
+    }
+]

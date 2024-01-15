@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Job{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Métier - {{ job.name }}</h1>
+
+    <table class="table">
+        <tbody>
+            <tr class="table-light">
+                <th>Id</th>
+                <td>{{ job.id }}</td>
+            </tr>
+            <tr class="table-light">
+                <th>Name</th>
+                <td>{{ job.name }}</td>
+            </tr>
+            <tr class="table-light">
+                <th>Activités</th>
+                <td>
+                    <ul>
+                        {% for activity in job.activities %}
+                        <li>{{ activity.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+
+            <tr class="table-light">
+                <th>Compétences</th>
+                <td>
+                    <ul>
+                        {% for skill in job.skills %}
+                        <li>{{ skill.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('job.index') }}">Retour à la liste</a>
+
+    <a class="btn btn-info" href="{{ path('job.edit', {'id': job.id}) }}">Editer le métier</a>
+
+    {{ include('pages/admin/job/_delete_form.html.twig') }}
+</div>
+{% endblock %}

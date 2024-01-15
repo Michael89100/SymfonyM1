@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum des métiers - Inscription aux ateliers de
+	{{ year }}
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-4">
+		<h1>Liste des ateliers de l'année
+			{{year}}</h1>
+		<div class="count mt-4">
+			Il y a
+			{{ workshopsWithEnrollment|length }}
+			{% if workshopsWithEnrollment|length > 1 %}
+				ateliers
+			{% else %}
+				atelier
+			{% endif %}
+			au total pour l'édition
+			{{ year }}.
+			<br>
+			Vous êtes inscrit à
+			{{registrationCount}}
+			{% if registrationCount > 1 %}
+				ateliers
+			{% else %}
+				atelier
+			{% endif %}
+			sur 3 maximum.
+		</div>
+		<table class="table table-hover table-striped mt-4">
+			<thead class="position-sticky top-0">
+				<tr class="table-dark">
+					<th scope="col" class="col-3">Atelier</th>
+					<th scope="col" class="col-auto">Description</th>
+					<th scope="col" class="col-2">Date & durée</th>
+					<th scope="col" class="col-1">Consulter</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for workshopData in workshopsWithEnrollment %}
+					{% set workshop = workshopData.workshop %}
+					{% set isEnrolled = workshopData.isEnrolled %}
+					{% set isFinished = workshopData.isFinished %}
+					{% set studentCount = workshopData.studentCount %}
+					{% set roomCapacity = workshopData.roomCapacity %}
+					{% set isFull = workshopData.isFull %}
+
+					<tr class="{{ (isEnrolled) ? 'table-info' : (isFull) ? 'table-danger' : '' }}">
+						<td class="align-top">
+							<a style="color:black;text-decoration:none" href="{{ path('workshop-registration.show', {'id': workshop.id}) }}">
+								<h2 class="h5">{{ workshop.name }}</h2>
+							</a>
+							{% if isFinished %}
+								<br><span class="badge bg-danger">Terminé</span>
+							{% endif %}
+							{% if isFull %}
+								<br><span class="badge bg-warning">Complet</span>
+							{% else %}
+								<br>Places :
+								{{ studentCount }}
+								/
+								{{ roomCapacity }}
+							{% endif %}
+						</td>
+						<td>{{ workshop.description}}<br>
+							Métiers :
+							{% for job in workshop.jobs %}
+								<span class="badge bg-success">{{ job.name }}</span>
+							{% endfor %}
+							<br>
+							Secteur :
+							<span class="badge bg-info">{{ workshop.sector.name }}</span>
+						</td>
+						<td class="align-middle">{{ workshop.startAt | format_datetime(locale='en') }}<br>
+							{{ workshop.duration }}
+							heures
+						</td>
+						<td class="align-middle text-center">
+							<a class="btn btn-success" href="{{ path('workshop-registration.show', {'id': workshop.id}) }}">
+								<i class="fa-solid fa-eye"></i>
+							</a>
+							{% if isFinished and isEnrolled %}
+								<a class="btn btn-success" href="{{ path('workshop-registration.show', {'id': workshop.id}) }}">
+									<span>Questionaire</span>
+								</a>
+							{% endif %}
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td class="table-warning" colspan="3">Pas d'ateliers trouvés 😱</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<p>
+			<div>
+				Voir les années précédentes :
+				<ul class="pagination pagination-sm">
+					{% for y in years %}
+						<li class="page-item {{ (y == year) ? 'active' : '' }}">
+							<a class="page-link" href="{{ path('workshop-registration.index', {'year': y}) }}">{{ y }}</a>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</p>
+
+	</div>
+{% endblock %}

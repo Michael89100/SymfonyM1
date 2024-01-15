@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Forum des métiers - Atelier
+	{{ workshop.name }}
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-4">
+		{{form_start(form)}}
+		{{form_widget(form)}}
+		{{form_end(form)}}
+	</div>
+{% endblock %}

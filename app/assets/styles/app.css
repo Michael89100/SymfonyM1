@@ -1,3 +1,8 @@
 body {
-    background-color: skyblue;
+    /* background-color: red; */
+}
+
+.table-responsive {
+    max-height: 500px; /* Ajuste cette valeur pour obtenir la hauteur désirée */
+    overflow-y: auto;
 }

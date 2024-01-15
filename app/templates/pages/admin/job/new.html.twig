@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Job{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Ajouter un nouveau métier</h1>
+
+    {{ include('pages/admin/job/_form.html.twig') }}
+
+    <a class="btn btn-primary mt-4" href="{{ path('job.index') }}">Retour à la liste</a>
+</div>
+{% endblock %}

@@ -54,5 +54,5 @@
 .vscode
 .idea
 
-infra/volumes/*
+/infra/volumes/
 *.log

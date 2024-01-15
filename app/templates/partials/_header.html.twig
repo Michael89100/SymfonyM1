@@ -22,7 +22,7 @@
 				<!-- espace pour ceux qui ont le role_speaker -->
 				{% if is_granted('ROLE_SPEAKER') %}
 					<li class="nav-item">
-						{% set speakerUrl = '/user/' ~ user.id ~ '/speakers' %}
+						{% set speakerUrl = '/user/' ~ app.user.id ~ '/speakers' %}
 						<a class="nav-link {{ currentPath starts with speakerUrl ? 'active' : '' }}" href="{{ path('user.speakers.workspace', {'id': app.user.id}) }}">Mon espace intervenant</a>
 					</li>
 				{% endif %}

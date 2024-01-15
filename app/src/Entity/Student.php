@@ -33,7 +33,7 @@ class Student
 
     #[ORM\ManyToOne(inversedBy: 'students')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $User = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'students')]
     #[ORM\JoinColumn(nullable: true)]
@@ -127,17 +127,17 @@ class Student
 
     public function getUser(): ?User
     {
-        return $this->User;
+        return $this->user;
     }
 
     public function getUserId(): ?int
     {
-        return $this->User->getId();
+        return $this->user->getId();
     }
 
-    public function setUser(?User $User): static
+    public function setUser(?User $user): static
     {
-        $this->User = $User;
+        $this->user = $user;
 
         return $this;
     }
@@ -152,5 +152,10 @@ class Student
         $this->edition = $edition;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getUser()->getFirstName() + $this->getUser()->getLastName();
     }
 }

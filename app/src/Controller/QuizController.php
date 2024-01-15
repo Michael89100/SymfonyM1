@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Quiz;
+use App\Entity\Question;
 use App\Form\QuizType;
 use App\Repository\QuizRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -77,5 +78,21 @@ class QuizController extends AbstractController
         }
 
         return $this->redirectToRoute('quiz.index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{quizId}/question/{questionId}/remove', name: 'quiz.remove_question', methods: ['POST'])]
+    public function removeQuestion(Request $request, EntityManagerInterface $entityManager, $quizId, $questionId): Response
+    {
+        $question = $entityManager->getRepository(Question::class)->find($questionId);
+        $quiz = $entityManager->getRepository(Quiz::class)->find($quizId);
+
+        if (!$question) {
+            throw $this->createNotFoundException('Question not found');
+        }
+
+        $quiz->removeQuestion($question);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('quiz.show', ['id' => $quiz->getId()], Response::HTTP_SEE_OTHER);
     }
 }

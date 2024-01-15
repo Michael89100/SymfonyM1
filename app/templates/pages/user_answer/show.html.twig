@@ -18,9 +18,9 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_user_answer_index') }}">back to list</a>
+    <a href="{{ path('user_answer.index') }}">back to list</a>
 
-    <a href="{{ path('app_user_answer_edit', {'id': user_answer.id}) }}">edit</a>
+    <a href="{{ path('user_answer.edit', {'id': user_answer.id}) }}">edit</a>
 
     {{ include('pages/admin/user_answer/_delete_form.html.twig') }}
 {% endblock %}

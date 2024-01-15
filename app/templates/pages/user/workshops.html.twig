@@ -67,6 +67,11 @@
 							<a class="btn btn-success" href="{{ path('workshop-registration.show', {'id': workshop.id, 'backto': current_menu}) }}">
 								<i class="fa-solid fa-eye"></i>
 							</a>
+							{% if isFinished %}
+								<a class="btn btn-success" href="{{ path('user_answer.new', {'quizId': workshop.quiz.id}) }}">
+									Questionaire
+								</a>
+							{% endif %}
 						</td>
 					</tr>
 				{% else %}

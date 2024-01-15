@@ -1,0 +1,86 @@
+[
+    {
+        "name": "Qu'est-ce qui vous attire le plus dans le domaine de l'Éducation et Formation?",
+        "type": "text"
+    },
+    {
+        "name": "Citez une compétence que vous aimeriez développer dans ce domaine.",
+        "type": "text"
+    },
+    {
+        "name": "Quelles sont vos attentes par rapport à des ateliers dans ce domaine?",
+        "type": "checkbox"
+    },
+    {
+        "name": "Quel aspect de l'Industrie et Manufacture vous intrigue le plus?",
+        "type": "text"
+    },
+    {
+        "name": "Préférez-vous les ateliers liés à la conception ou à la production?",
+        "type": "radio"
+    },
+    {
+        "name": "Quelle compétence pensez-vous être cruciale dans ce secteur?",
+        "type": "text"
+    },
+    {
+        "name": "Quelle source d'énergie renouvelable vous semble la plus prometteuse?",
+        "type": "radio"
+    },
+    {
+        "name": "Comment pourriez-vous contribuer à la protection de l'environnement?",
+        "type": "text"
+    },
+    {
+        "name": "Avez-vous déjà participé à des initiatives écologiques?",
+        "type": "checkbox"
+    },
+    {
+        "name": "Quelle innovation technologique récente vous impressionne le plus?",
+        "type": "text"
+    },
+    {
+        "name": "Préférez-vous les ateliers axés sur la programmation ou la conception matérielle?",
+        "type": "radio"
+    },
+    {
+        "name": "Quel problème actuel pensez-vous que la technologie pourrait résoudre?",
+        "type": "text"
+    },
+    {
+        "name": "Quelle forme d'expression artistique vous passionne le plus?",
+        "type": "text"
+    },
+    {
+        "name": "Pensez-vous que la préservation culturelle est importante? Pourquoi?",
+        "type": "text"
+    },
+    {
+        "name": "Avez-vous déjà participé à des événements culturels? Lesquels?",
+        "type": "checkbox"
+    },
+    {
+        "name": "Quel aspect financier vous intrigue le plus?",
+        "type": "text"
+    },
+    {
+        "name": "Préférez-vous les investissements à court terme ou à long terme?",
+        "type": "radio"
+    },
+    {
+        "name": "Quelle compétence financière pensez-vous être cruciale pour la réussite?",
+        "type": "text"
+    },
+    {
+        "name": "Quelle avancée récente dans la biotechnologie vous semble la plus prometteuse?",
+        "type": "text"
+    },
+    {
+        "name": "Pensez-vous que la recherche médicale devrait être une priorité?",
+        "type": "checkbox"
+    },
+    {
+        "name": "Avez-vous déjà participé à des initiatives de santé communautaires?",
+        "type": "checkbox"
+    }
+]

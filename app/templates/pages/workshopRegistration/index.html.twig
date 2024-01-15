@@ -72,7 +72,7 @@
 							Secteur :
 							<span class="badge bg-info">{{ workshop.sector.name }}</span>
 						</td>
-						<td class="align-middle">{{ workshop.startAt | format_datetime(locale='fr') }}<br>
+						<td class="align-middle">{{ workshop.startAt | format_datetime(locale='en') }}<br>
 							{{ workshop.duration }}
 							heures
 						</td>
@@ -80,6 +80,11 @@
 							<a class="btn btn-success" href="{{ path('workshop-registration.show', {'id': workshop.id}) }}">
 								<i class="fa-solid fa-eye"></i>
 							</a>
+							{% if isFinished and isEnrolled %}
+								<a class="btn btn-success" href="{{ path('workshop-registration.show', {'id': workshop.id}) }}">
+									<span>Questionaire</span>
+								</a>
+							{% endif %}
 						</td>
 					</tr>
 				{% else %}

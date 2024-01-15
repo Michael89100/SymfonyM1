@@ -48,6 +48,8 @@ class AppFixtures extends Fixture
     $skillsArray = json_decode(file_get_contents(__DIR__ . '/skills.json'), true);
     $jobsArray = json_decode(file_get_contents(__DIR__ . '/jobs.json'), true);
     $sectorsArray = json_decode(file_get_contents(__DIR__ . '/sectors.json'), true);
+    $quizzesArray = json_decode(file_get_contents(__DIR__ . '/quizzes.json'), true);
+    $questionsArray = json_decode(file_get_contents(__DIR__ . '/questions.json'), true);
 
     // Users
     $users = [];
@@ -207,7 +209,7 @@ class AppFixtures extends Fixture
     for ($i = 0; $i < 5; $i++) {
       $quiz = new Quiz();
       $quiz
-        ->setName($this->faker->words(2, true));
+        ->setName($this->faker->randomElement($quizzesArray)['name']);
       $quizzes[] = $quiz;
       $manager->persist($quiz);
     }
@@ -218,9 +220,9 @@ class AppFixtures extends Fixture
     for ($i = 0; $i < 30; $i++) {
       $question = new Question();
       $question
-        ->setName($this->faker->words(7, true))
+        ->setName($this->faker->randomElement($questionsArray)['name'])
         ->setQuiz($this->faker->randomElement($quizzes))
-        ->setType($this->faker->randomElement(['text', 'radio', 'checkbox']));
+        ->setType($this->faker->randomElement($questionsArray)['type']);
       $questions[] = $question;
       $manager->persist($question);
     }

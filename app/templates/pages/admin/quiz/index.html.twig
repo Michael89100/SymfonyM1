@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Quiz index{% endblock %}
+{% block title %}Quiz{% endblock %}
 
 {% block body %}
-    <h1>Quiz index</h1>
+    <h1>Quiz</h1>
 
     <table class="table">
         <thead>
@@ -19,17 +19,17 @@
                 <td>{{ quiz.id }}</td>
                 <td>{{ quiz.name }}</td>
                 <td>
-                    <a href="{{ path('app_quiz_show', {'id': quiz.id}) }}">show</a>
-                    <a href="{{ path('app_quiz_edit', {'id': quiz.id}) }}">edit</a>
+                    <a href="{{ path('quiz.show', {'id': quiz.id}) }}">Show</a>
+                    <a href="{{ path('quiz.edit', {'id': quiz.id}) }}">Edit</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="3">No records found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_quiz_new') }}">Create new</a>
+    <a href="{{ path('quiz.new') }}">Create new</a>
 {% endblock %}

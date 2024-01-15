@@ -7,7 +7,7 @@
 
     {{ include('pages/admin/question/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_question_index') }}">back to list</a>
+    <a href="{{ path('question.index') }}">back to list</a>
 
     {{ include('pages/admin/question/_delete_form.html.twig') }}
 {% endblock %}

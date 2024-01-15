@@ -21,6 +21,40 @@ class QuizRepository extends ServiceEntityRepository
         parent::__construct($registry, Quiz::class);
     }
 
+    /**
+     * Get all questions of a quiz.
+     *
+     * @param int $quizId The ID of the quiz.
+     * @return array The array of questions.
+     */
+    public function getAllQuestions($quizId): array
+    {
+        return $this->createQueryBuilder('q')
+            ->andWhere('q.quizId = :quizId')
+            ->setParameter('quizId', $quizId)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Remove a question from a quiz.
+     *
+     * @param int $quizId The ID of the quiz.
+     * @param int $questionId The ID of the question to remove.
+     * @return void
+     */
+    public function removeQuestion($quizId, $questionId): void
+    {
+        $this->createQueryBuilder('q')
+            ->delete()
+            ->andWhere('q.quizId = :quizId')
+            ->andWhere('q.id = :questionId')
+            ->setParameter('quizId', $quizId)
+            ->setParameter('questionId', $questionId)
+            ->getQuery()
+            ->execute();
+    }
+
 //    /**
 //     * @return Quiz[] Returns an array of Quiz objects
 //     */

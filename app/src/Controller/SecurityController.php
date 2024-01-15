@@ -16,7 +16,7 @@ class SecurityController extends AbstractController
 {
   /**
    * Cette route permet de se connecter
-   * 
+   *
    * @Route("/connexion", name="security.login")
    * @param AuthenticationUtils $auth
    * @return Response
@@ -40,7 +40,7 @@ class SecurityController extends AbstractController
 
   /**
    * Cette route permet de se déconnecter
-   * 
+   *
    * @Route("/deconnexion", name="security.logout")
    * @return void
    */
@@ -52,7 +52,7 @@ class SecurityController extends AbstractController
 
   /**
    * Cette route permet de créer un compte utilisateur
-   * 
+   *
    * @Route("/inscription", name="security.registration")
    * @param Request $request
    * @param EntityManagerInterface $manager

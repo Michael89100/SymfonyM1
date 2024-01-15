@@ -1,0 +1,30 @@
+[
+    {
+      "id": 1,
+      "name": "Éducation et Formation"
+    },
+    {
+      "id": 2,
+      "name": "Industrie et Manufacture"
+    },
+    {
+      "id": 3,
+      "name": "Énergie et Environnement"
+    },
+    {
+      "id": 4,
+      "name": "Technologie et Innovation"
+    },
+    {
+      "id": 5,
+      "name": "Arts et Culture"
+    },
+    {
+      "id": 6,
+      "name": "Finance et Banque"
+    },
+    {
+      "id": 7,
+      "name": "Santé et Biotechnologie"
+    }
+  ]

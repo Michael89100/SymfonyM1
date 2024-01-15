@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Entity\Edition;
 use App\Entity\Quiz;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -15,10 +14,6 @@ class QuizType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('edition', EntityType::class, [
-                'class' => Edition::class,
-'choice_label' => 'id',
-            ])
         ;
     }
 

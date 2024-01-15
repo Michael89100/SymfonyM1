@@ -7,12 +7,12 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<UserAnwser>
+ * @extends ServiceEntityRepository<UserAnswer>
  *
- * @method UserAnwser|null find($id, $lockMode = null, $lockVersion = null)
- * @method UserAnwser|null findOneBy(array $criteria, array $orderBy = null)
- * @method UserAnwser[]    findAll()
- * @method UserAnwser[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method UserAnswer|null find($id, $lockMode = null, $lockVersion = null)
+ * @method UserAnswer|null findOneBy(array $criteria, array $orderBy = null)
+ * @method UserAnswer[]    findAll()
+ * @method UserAnswer[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class UserAnswerRepository extends ServiceEntityRepository
 {
@@ -22,7 +22,7 @@ class UserAnswerRepository extends ServiceEntityRepository
     }
 
     //    /**
-    //     * @return UserAnwser[] Returns an array of UserAnwser objects
+    //     * @return UserAnswer[] Returns an array of UserAnswer objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -36,7 +36,7 @@ class UserAnswerRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?UserAnwser
+    //    public function findOneBySomeField($value): ?UserAnswer
     //    {
     //        return $this->createQueryBuilder('u')
     //            ->andWhere('u.exampleField = :val')

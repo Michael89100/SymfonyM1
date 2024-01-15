@@ -56,9 +56,9 @@ class WorkshopRepository extends ServiceEntityRepository
             ->join('w.edition', 'e')
             ->join('w.students', 's')
             ->where('e.year = :year')
-            ->andWhere('s.User = :User')
+            ->andWhere('s.user = :user')
             ->setParameter('year', $year)
-            ->setParameter('User', $user)
+            ->setParameter('user', $user)
             ->getQuery()
             ->getResult();
     }

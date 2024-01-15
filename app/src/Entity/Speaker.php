@@ -88,7 +88,7 @@ class Speaker
         return $this->user;
     }
 
-    
+
     public function getUserId(): ?int
     {
         return $this->user->getId();
@@ -96,7 +96,7 @@ class Speaker
 
     public function setUser(?User $user): static
     {
-        $this->User = $user;
+        $this->user = $user;
 
         return $this;
     }
@@ -104,6 +104,4 @@ class Speaker
     {
         return $this->getUser()->getFirstName() + $this->getUser()->getLastName();
     }
-
-
 }

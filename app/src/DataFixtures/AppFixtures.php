@@ -135,7 +135,7 @@ class AppFixtures extends Fixture
         ->setYear(2023 + $i)
         ->setStartAt(DateTimeImmutable::createFromMutable($dateStart))
         ->setEndAt(DateTimeImmutable::createFromMutable($dateEnd))
-        ->setAdress($this->faker->address());
+        ->setAddress($this->faker->address());
       $editions[] = $edition;
       $manager->persist($edition);
     }
@@ -146,7 +146,7 @@ class AppFixtures extends Fixture
       $school = new School();
       $school
         ->setName($this->faker->words(3, true))
-        ->setAdress($this->faker->address())
+        ->setAddress($this->faker->address())
         ->setCity($this->faker->city())
         ->setPostalCode(intval($this->faker->postcode()))
         ->setCountry("France");

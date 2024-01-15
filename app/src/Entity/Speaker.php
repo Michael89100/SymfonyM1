@@ -102,6 +102,6 @@ class Speaker
     }
     public function __toString(): string
     {
-        return $this->getUser()->getFirstName() + $this->getUser()->getLastName();
+        return $this->getUser()->getFirstName() . ' ' . $this->getUser()->getLastName();
     }
 }
